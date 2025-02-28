@@ -248,9 +248,9 @@ public class register extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(backlogin, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(passwordtext)
                     .addComponent(cnumbertext)
@@ -321,7 +321,7 @@ public class register extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(446, Short.MAX_VALUE)
+                .addContainerGap(443, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47))
         );
@@ -367,9 +367,6 @@ if (signUpValidation()) {
     RegisterError.setLocationRelativeTo(null);
 
 }
-
-
-
     }//GEN-LAST:event_SignupActionPerformed
 
     private void firstnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_firstnameFocusLost
@@ -498,108 +495,7 @@ if (password1.isEmpty()) {
 password.repaint();
     }//GEN-LAST:event_passwordFocusLost
 
-     private boolean signUpValidation() {
-        boolean valid = true;
-        
- //First name Validation       
- String user = firstname.getText();
-
-if (user.isEmpty()) {
-    firstname.setForeground(Color.RED);
-    requiredfname.setText("First Name is required");
-    requiredfname.setForeground(Color.RED);
-} else {
-    firstname.setForeground(Color.BLACK);
-    requiredfname.setText("");
-}
-
-firstname.repaint();
-
-
-// Last name Validation
-
-String last = lastname.getText();
-
-if (last.isEmpty()) {
-    lastname.setForeground(Color.RED);
-    requiredlname.setText("Last Name is required");
-    requiredlname.setForeground(Color.RED);
-} else {
-    lastname.setForeground(Color.BLACK);
-    requiredlname.setText("");
-}
-
-lastname.repaint();
-
-// Email Validation
-
-String email1 = email.getText();
-String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-if (email1.isEmpty()) {
-    email.setForeground(Color.RED);
-    requiredemail.setText("Email is required");
-    requiredemail.setForeground(Color.RED);
-} else if (!email1.matches(emailRegex)) {
-    email.setForeground(Color.RED);
-    requiredemail.setText("Email is invalid");
-    requiredemail.setForeground(Color.RED);
-} else if (emailExists(email1)) {
-    email.setForeground(Color.RED);
-    requiredemail.setText("Email already exists");
-    requiredemail.setForeground(Color.RED);
-} else {
-    email.setForeground(Color.BLACK);
-    requiredemail.setText("");
-}
-
-email.repaint();
-
-// Contact Number Validation
-
-String con = contactnumber.getText();
-
-if (con.isEmpty()) {
-    contactnumber.setForeground(Color.RED);
-    requiredcnumber.setText("Contact Number is required");
-    requiredcnumber.setForeground(Color.RED);
-} else if (!con.matches("\\d{11}")) { 
-    contactnumber.setForeground(Color.RED);
-    requiredcnumber.setText("Contact Number must be exactly 11 digits");
-    requiredcnumber.setForeground(Color.RED);
-} else {
-    contactnumber.setForeground(Color.BLACK);
-    requiredcnumber.setText("");
-}
-
-contactnumber.repaint();
-
-
-
-
-// Password Validation
-
-String password1 = password.getText();
-
-        if (password1.isEmpty()) {
-            password.setForeground(Color.RED);
-            requiredpassword.setText("Password is required");
-            requiredpassword.setForeground(Color.RED);
-        } else if (password1.length() < 8) {
-
-            password.setForeground(Color.RED);
-            requiredpassword.setText("Password too short. Must be 8 characters or more");
-            requiredpassword.setForeground(Color.RED);
-        } else {
-            password.setForeground(Color.BLACK);
-            requiredpassword.setText("Password good");
-            requiredpassword.setForeground(Color.GREEN);
-        }
-        password.repaint();
- 
-        return valid;
-    
-     } 
+      
     
     
     private void backloginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backloginMouseClicked
@@ -621,6 +517,118 @@ String password1 = password.getText();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    
+    private boolean signUpValidation() {
+        boolean valid = true;
+        
+ //First name Validation       
+ String user = firstname.getText();
+
+if (user.isEmpty()) {
+    firstname.setForeground(Color.RED);
+    requiredfname.setText("First Name is required");
+    requiredfname.setForeground(Color.RED);
+    valid = false;
+} else {
+    firstname.setForeground(Color.BLACK);
+    requiredfname.setText("");
+}
+
+firstname.repaint();
+
+
+// Last name Validation
+
+String last = lastname.getText();
+
+if (last.isEmpty()) {
+    lastname.setForeground(Color.RED);
+    requiredlname.setText("Last Name is required");
+    requiredlname.setForeground(Color.RED);
+    valid = false;
+} else {
+    lastname.setForeground(Color.BLACK);
+    requiredlname.setText("");
+}
+
+lastname.repaint();
+
+// Email Validation
+
+String email1 = email.getText();
+String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+if (email1.isEmpty()) {
+    email.setForeground(Color.RED);
+    requiredemail.setText("Email is required");
+    requiredemail.setForeground(Color.RED);
+    valid = false;
+} else if (!email1.matches(emailRegex)) {
+    email.setForeground(Color.RED);
+    requiredemail.setText("Email is invalid");
+    requiredemail.setForeground(Color.RED);
+    valid = false;
+} else if (emailExists(email1)) {
+    email.setForeground(Color.RED);
+    requiredemail.setText("Email already exists");
+    requiredemail.setForeground(Color.RED);
+    valid = false;
+} else {
+    email.setForeground(Color.BLACK);
+    requiredemail.setText("");
+}
+
+email.repaint();
+
+// Contact Number Validation
+
+String con = contactnumber.getText();
+
+if (con.isEmpty()) {
+    contactnumber.setForeground(Color.RED);
+    requiredcnumber.setText("Contact Number is required");
+    requiredcnumber.setForeground(Color.RED);
+    valid = false;
+} else if (!con.matches("\\d{11}")) { 
+    contactnumber.setForeground(Color.RED);
+    requiredcnumber.setText("Contact Number must be exactly 11 digits");
+    requiredcnumber.setForeground(Color.RED);
+    valid = false;
+} else {
+    contactnumber.setForeground(Color.BLACK);
+    requiredcnumber.setText("");
+}
+
+contactnumber.repaint();
+
+
+
+
+// Password Validation
+
+String password1 = password.getText();
+
+        if (password1.isEmpty()) {
+            password.setForeground(Color.RED);
+            requiredpassword.setText("Password is required");
+            requiredpassword.setForeground(Color.RED);
+            valid = false;
+        } else if (password1.length() < 8) {
+
+            password.setForeground(Color.RED);
+            requiredpassword.setText("Password too short. Must be 8 characters or more");
+            requiredpassword.setForeground(Color.RED);
+            valid = false;
+        } else {
+            password.setForeground(Color.BLACK);
+            requiredpassword.setText("Password good");
+            requiredpassword.setForeground(Color.GREEN);
+        }
+        password.repaint();
+ 
+        return valid;
+    
+     }
     /**
      * @param args the command line arguments
      */
