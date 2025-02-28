@@ -166,6 +166,9 @@
                 <Property name="text" type="java.lang.String" value="Login"/>
                 <Property name="borderPainted" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loginbuttonActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="forgotpassword">
               <Properties>

@@ -5,8 +5,15 @@
  */
 package panel;
 
+import admin.adminDB;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -83,6 +90,11 @@ public class login extends javax.swing.JFrame {
         loginbutton.setBackground(new java.awt.Color(241, 185, 185));
         loginbutton.setText("Login");
         loginbutton.setBorderPainted(false);
+        loginbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginbuttonActionPerformed(evt);
+            }
+        });
 
         forgotpassword.setText("Forgot password");
 
@@ -168,9 +180,9 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameActionPerformed
 
     private void usernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usernameFocusLost
-        Font smallFont = new Font("Arial", Font.PLAIN, 10); // Create a font with size 8
-username.setFont(smallFont); // Apply font to JTextField
-requireduser.setFont(smallFont); // Apply font to JLabel
+        Font smallFont = new Font("Arial", Font.PLAIN, 10); 
+username.setFont(smallFont); 
+requireduser.setFont(smallFont); 
 
 String user = username.getText();
 
@@ -211,6 +223,50 @@ password.repaint();
         reg.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_registerbuttonMouseClicked
+
+    private void loginbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbuttonActionPerformed
+        String url = "jdbc:mysql://localhost:3306/pureclean";
+String user = "root";
+String password1 = "";
+
+String query = "SELECT u_password, u_type FROM tbl_user WHERE u_email = ? AND u_status = 'Active'";
+
+try (Connection conn = DriverManager.getConnection(url, user, password1);
+     PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+    pstmt.setString(1, username.getText());
+    ResultSet rs = pstmt.executeQuery();
+
+    if (rs.next()) {
+        String storedPassword = rs.getString("u_password");
+        String userType = rs.getString("u_type"); 
+
+        if (password.getText().equals(storedPassword)) {
+            JOptionPane.showMessageDialog(null, "Login Successful!");
+
+            // Redirect based on user type
+            if ("User".equalsIgnoreCase(userType)) {
+                UserDB csdb = new UserDB();
+                this.dispose();
+                csdb.setVisible(true);
+            } else if ("Admin".equalsIgnoreCase(userType)) {
+                adminDB dbd = new adminDB();
+                this.dispose();
+                dbd.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Unknown user type!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Wrong Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "User not found or inactive!", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+} catch (SQLException e) {
+    JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+}
+
+    }//GEN-LAST:event_loginbuttonActionPerformed
 
     /**
      * @param args the command line arguments
