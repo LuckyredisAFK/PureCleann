@@ -61,11 +61,14 @@ public class adminDB extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         overview = new javax.swing.JTable();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -116,15 +119,15 @@ public class adminDB extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(overview);
 
-        jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 740, 260));
+        jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 740, 260));
 
-        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 760, 280));
+        jLabel7.setText("Overview");
+        jPanel5.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, 20));
+
+        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 760, 320));
 
         jLabel6.setText("ADMIN DASHBOARD");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, -1, -1));
-
-        jLabel7.setText("Overview");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, -1));
 
         mbg.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 850, 510));
 
@@ -133,8 +136,13 @@ public class adminDB extends javax.swing.JFrame {
         mbg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 90, -1));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel5.setText("DASHBOARD");
-        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 110, 30));
+        jLabel5.setText("ACCOUNT");
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 90, 30));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/backlogin1.png"))); // NOI18N
         jLabel8.setText("Logout");
@@ -149,6 +157,33 @@ public class adminDB extends javax.swing.JFrame {
             }
         });
         mbg.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, -1, -1));
+
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel9.setText("DASHBOARD");
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 110, 30));
+
+        jLabel10.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel10.setText("PROFILE");
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel10MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, 30));
+
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel11.setText("ACCOUNT");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 90, 30));
 
         getContentPane().add(mbg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 510));
 
@@ -166,6 +201,32 @@ public class adminDB extends javax.swing.JFrame {
         log.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        account acc = new account();
+
+        acc.setVisible(true);
+        this.dispose();    }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+        account acc = new account();
+
+        acc.setVisible(true);
+    }//GEN-LAST:event_jLabel10MouseClicked
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        accountmanager man = new accountmanager();
+
+        man.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel11MouseClicked
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        adminDB db = new adminDB();
+
+        db.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel9MouseClicked
 
     /**
      * @param args the command line arguments
@@ -204,6 +265,8 @@ public class adminDB extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -211,6 +274,7 @@ public class adminDB extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

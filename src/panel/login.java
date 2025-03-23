@@ -6,6 +6,8 @@
 package panel;
 
 import admin.adminDB;
+import config.connectDB;
+import config.session;
 import java.awt.Color;
 import java.awt.Font;
 import java.sql.Connection;
@@ -27,6 +29,55 @@ public class login extends javax.swing.JFrame {
     public login() {
         initComponents();
     }
+    
+    
+    
+    public String[] loginAcc(String email, String password) {
+
+        connectDB con = new connectDB();
+
+        try {
+            String query = "SELECT * FROM tbl_user WHERE u_email = ? AND u_password = ?";
+            PreparedStatement pstmt = con.getConnection().prepareStatement(query);
+            pstmt.setString(1, email.trim());
+            pstmt.setString(2, password.trim());
+            ResultSet resultSet = pstmt.executeQuery();
+
+            if (resultSet.next()) {
+                return new String[]{resultSet.getString("u_type").trim(), resultSet.getString("u_status")};
+            }
+
+        } catch (SQLException ex) {
+
+        }
+        return null;
+    }
+    
+    public String[] getUserDetails(String email) {
+    connectDB con = new connectDB();
+    try {
+        String query = "SELECT u_id, u_firstname, u_lastname, u_email, u_contactnumber, u_type, u_status FROM tbl_user WHERE u_email = ?";
+        PreparedStatement pstmt = con.getConnection().prepareStatement(query);
+        pstmt.setString(1, email.trim()); // Set email as the query parameter
+        ResultSet resultSet = pstmt.executeQuery();
+
+        if (resultSet.next()) {
+            return new String[]{
+                resultSet.getString("u_id").trim(),
+                resultSet.getString("u_firstname").trim(),
+                resultSet.getString("u_lastname").trim(),
+                resultSet.getString("u_email").trim(),
+                resultSet.getString("u_contactnumber").trim(),
+                resultSet.getString("u_type").trim(),
+                resultSet.getString("u_status").trim()
+            };
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    return null; // Return null if no user is found
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -225,46 +276,72 @@ password.repaint();
     }//GEN-LAST:event_registerbuttonMouseClicked
 
     private void loginbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbuttonActionPerformed
-        String url = "jdbc:mysql://localhost:3306/pureclean";
-String user = "root";
-String password1 = "";
+        String user = username.getText().trim();
+String pass = password.getText().trim();
 
-String query = "SELECT u_password, u_type FROM tbl_user WHERE u_email = ? AND u_status = 'Active'";
-
-try (Connection conn = DriverManager.getConnection(url, user, password1);
-     PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-    pstmt.setString(1, username.getText());
-    ResultSet rs = pstmt.executeQuery();
-
-    if (rs.next()) {
-        String storedPassword = rs.getString("u_password");
-        String userType = rs.getString("u_type"); 
-
-        if (password.getText().equals(storedPassword)) {
-            JOptionPane.showMessageDialog(null, "Login Successful!");
-
-            // Redirect based on user type
-            if ("User".equalsIgnoreCase(userType)) {
-                UserDB csdb = new UserDB();
-                this.dispose();
-                csdb.setVisible(true);
-            } else if ("Admin".equalsIgnoreCase(userType)) {
-                adminDB dbd = new adminDB();
-                this.dispose();
-                dbd.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "Unknown user type!", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Wrong Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    } else {
-        JOptionPane.showMessageDialog(null, "User not found or inactive!", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-} catch (SQLException e) {
-    JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+if (user.isEmpty() || pass.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Username and/or password cannot be empty.", "Login Error", JOptionPane.ERROR_MESSAGE);
+    username.requestFocus();
+    return;
 }
+
+try {
+    // Directly use the entered username and password without hashing
+    String[] loginData = loginAcc(user, pass);
+
+    if (loginData == null) {
+        JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+        password.requestFocus();
+        return;
+    }
+
+    String[] userDetails = getUserDetails(user);
+
+    String userID = userDetails[0];
+    String firstName = userDetails[1];
+    String lastName = userDetails[2];
+    String email = userDetails[3];
+    String contactNumber = userDetails[4];
+    String accType = loginData[0];
+    String accStatus = loginData[1];
+
+    if (!"active".equalsIgnoreCase(accStatus)) {
+        JOptionPane.showMessageDialog(this, "Your account is still pending. Please contact the administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    session sess = session.getInstance();
+    sess.setU_id(userID);
+    sess.setUsername(user);
+    sess.setFirstName(firstName);
+    sess.setLastName(lastName);
+    sess.setEmail(email);
+    sess.setContact(contactNumber);
+    sess.setAcc_type(accType);
+    sess.setAcc_status(accStatus);
+
+    if (accType != null) {
+        if ("Admin".equalsIgnoreCase(accType)) {
+            new adminDB().setVisible(true);
+        } else if ("Employee".equalsIgnoreCase(accType)) {
+            new UserDB().setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Unknown user type!", "Login Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        this.dispose(); // Close login window
+    } else {
+        JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+        password.requestFocus();
+    }
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(this, "Error during login: " + e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
+    e.printStackTrace();
+}
+
+
 
     }//GEN-LAST:event_loginbuttonActionPerformed
 
