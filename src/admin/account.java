@@ -6,6 +6,8 @@
 package admin;
 
 import config.session;
+import crud.changepassword;
+import crud.editaccount;
 import panel.login;
 
 /**
@@ -58,6 +60,7 @@ public class account extends javax.swing.JFrame {
         role = new javax.swing.JLabel();
         email = new javax.swing.JLabel();
         name = new javax.swing.JLabel();
+        changepassword = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -90,6 +93,14 @@ public class account extends javax.swing.JFrame {
 
         name.setText("Name");
         jPanel5.add(name, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 200, 20));
+
+        changepassword.setText("Change Password");
+        changepassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changepasswordActionPerformed(evt);
+            }
+        });
+        jPanel5.add(changepassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, 20));
 
         jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 830, 490));
 
@@ -178,6 +189,20 @@ public class account extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
+    private void changepasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changepasswordActionPerformed
+        changepassword acc = new changepassword(
+        session.getU_id(), 
+        session.getFirstName(), 
+        session.getLastName(), 
+        session.getEmail(), 
+        session.getContact()
+    );
+        acc.setVisible(true);
+
+        
+        
+    }//GEN-LAST:event_changepasswordActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -214,6 +239,7 @@ public class account extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton changepassword;
     private javax.swing.JLabel cnum;
     private javax.swing.JLabel email;
     private javax.swing.JLabel jLabel10;

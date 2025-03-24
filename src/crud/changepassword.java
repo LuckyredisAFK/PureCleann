@@ -9,21 +9,18 @@ import admin.accountmanager;
 import config.connectDB;
 import java.awt.Color;
 import java.awt.Font;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author vienz
  */
-public class editaccount extends javax.swing.JFrame {
+public class changepassword extends javax.swing.JFrame {
 
     /**
-     * Creates new form editaccount
+     * Creates new form changepassword
      */
-    public editaccount(String id, String fname, String lname, String eMail, String pnum) {
+    public changepassword(String id, String fname, String lname, String eMail, String pnum) {
         initComponents();
         
         idfieldtext.setText(id);
@@ -31,32 +28,18 @@ public class editaccount extends javax.swing.JFrame {
         lastname.setText(lname);
         contactnumber.setText(pnum);
         email.setText(eMail);
+        
+    idfieldtext.setText(id);
+    firstname.setEditable(false);
+    lastname.setEditable(false);
+    contactnumber.setEditable(false);
+    email.setEditable(false);
+        
     }
+    
 
   
     
-    private boolean emailExists(String email) {
-
-        connectDB con = new connectDB();
-
-        try {
-            String query = "SELECT * FROM tbl_user WHERE u_email = ?";
-            PreparedStatement pstmt = con.getConnection().prepareStatement(query);
-            pstmt.setString(1, email.trim());
-            ResultSet resultSet = pstmt.executeQuery();
-
-            if (resultSet.next()) {
-
-                return true;
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("" + ex);
-
-        }
-
-        return false;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -79,16 +62,18 @@ public class editaccount extends javax.swing.JFrame {
         email = new javax.swing.JTextField();
         emailtext = new javax.swing.JLabel();
         requiredemail = new javax.swing.JLabel();
-        contactnumber = new javax.swing.JTextField();
+        changepassword1 = new javax.swing.JTextField();
         cnumbertext = new javax.swing.JLabel();
         requiredcnumber = new javax.swing.JLabel();
-        idfieldtext = new javax.swing.JLabel();
+        idfieldtext1 = new javax.swing.JLabel();
         Signup = new javax.swing.JButton();
         backlogin = new javax.swing.JLabel();
-        idfield = new javax.swing.JLabel();
+        contactnumber = new javax.swing.JTextField();
+        passwordtext = new javax.swing.JLabel();
+        requiredpassword = new javax.swing.JLabel();
+        idfieldtext = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -146,15 +131,15 @@ public class editaccount extends javax.swing.JFrame {
 
         requiredemail.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
 
-        contactnumber.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        contactnumber.addFocusListener(new java.awt.event.FocusAdapter() {
+        changepassword1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        changepassword1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                contactnumberFocusLost(evt);
+                changepassword1FocusLost(evt);
             }
         });
-        contactnumber.addActionListener(new java.awt.event.ActionListener() {
+        changepassword1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contactnumberActionPerformed(evt);
+                changepassword1ActionPerformed(evt);
             }
         });
 
@@ -162,7 +147,7 @@ public class editaccount extends javax.swing.JFrame {
 
         requiredcnumber.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
 
-        idfieldtext.setText("ID:");
+        idfieldtext1.setText("ID:");
 
         Signup.setBackground(new java.awt.Color(241, 185, 185));
         Signup.setText("Edit");
@@ -184,6 +169,22 @@ public class editaccount extends javax.swing.JFrame {
                 backloginMouseClicked(evt);
             }
         });
+
+        contactnumber.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        contactnumber.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                contactnumberFocusLost(evt);
+            }
+        });
+        contactnumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contactnumberActionPerformed(evt);
+            }
+        });
+
+        passwordtext.setText("Password");
+
+        requiredpassword.setFont(new java.awt.Font("Dialog", 1, 10)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -215,29 +216,36 @@ public class editaccount extends javax.swing.JFrame {
                                 .addComponent(cnumbertext))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(2, 2, 2)
-                                .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(51, 51, 51)
-                                .addComponent(contactnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(68, 68, 68)
-                                .addComponent(backlogin, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(Signup, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(requiredemail, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(58, 58, 58)
-                                .addComponent(requiredcnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(requiredemail, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(52, 52, 52)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(contactnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(requiredcnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
-                                .addComponent(idfieldtext)
+                                .addComponent(idfieldtext1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(idfield))
-                            .addComponent(logintext))))
-                .addContainerGap(23, Short.MAX_VALUE))
+                                .addComponent(idfieldtext, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(logintext)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(changepassword1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(66, 66, 66)
+                                .addComponent(passwordtext))
+                            .addComponent(requiredpassword, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addComponent(backlogin, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Signup, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,8 +254,8 @@ public class editaccount extends javax.swing.JFrame {
                 .addComponent(logintext)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(idfieldtext)
-                    .addComponent(idfield))
+                    .addComponent(idfieldtext1)
+                    .addComponent(idfieldtext))
                 .addGap(13, 13, 13)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
@@ -266,45 +274,57 @@ public class editaccount extends javax.swing.JFrame {
                     .addComponent(cnumbertext))
                 .addGap(6, 6, 6)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(contactnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(4, 4, 4)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(requiredemail, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(requiredcnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(requiredemail, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(requiredcnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(contactnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(passwordtext)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(changepassword1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(requiredpassword, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(backlogin)
                     .addComponent(Signup, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 490, 310));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 490, 350));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 520));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 650, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 520, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void firstnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_firstnameFocusLost
-        Font smallFont = new Font("Arial", Font.PLAIN, 10);
-        firstname.setFont(smallFont);
-        requiredfname.setFont(smallFont);
-
-        String user = firstname.getText();
-
-        if (user.isEmpty()) {
-            firstname.setForeground(Color.RED);
-            requiredfname.setText("First Name is required");
-            requiredfname.setForeground(Color.RED);
-        } else {
-            firstname.setForeground(Color.BLACK);
-            requiredfname.setText("");
-        }
-
-        firstname.repaint();
+        
     }//GEN-LAST:event_firstnameFocusLost
 
     private void firstnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstnameActionPerformed
@@ -312,22 +332,7 @@ public class editaccount extends javax.swing.JFrame {
     }//GEN-LAST:event_firstnameActionPerformed
 
     private void lastnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lastnameFocusLost
-        Font smallFont = new Font("Arial", Font.PLAIN, 10);
-        lastname.setFont(smallFont);
-        requiredlname.setFont(smallFont);
-
-        String user = lastname.getText();
-
-        if (user.isEmpty()) {
-            lastname.setForeground(Color.RED);
-            requiredlname.setText("Last Name is required");
-            requiredlname.setForeground(Color.RED);
-        } else {
-            lastname.setForeground(Color.BLACK);
-            requiredlname.setText("");
-        }
-
-        lastname.repaint();
+        
     }//GEN-LAST:event_lastnameFocusLost
 
     private void lastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastnameActionPerformed
@@ -335,185 +340,96 @@ public class editaccount extends javax.swing.JFrame {
     }//GEN-LAST:event_lastnameActionPerformed
 
     private void emailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailFocusLost
-        Font smallFont = new Font("Arial", Font.PLAIN, 10);
-        email.setFont(smallFont);
-        requiredemail.setFont(smallFont);
 
-        String email1 = email.getText();
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-        if (email1.isEmpty()) {
-            email.setForeground(Color.RED);
-            requiredemail.setText("Email is required");
-            requiredemail.setForeground(Color.RED);
-        } else if (!email1.matches(emailRegex)) {
-            email.setForeground(Color.RED);
-            requiredemail.setText("Email is invalid");
-            requiredemail.setForeground(Color.RED);
-        } else if (emailExists(email1)) {
-            email.setForeground(Color.RED);
-            requiredemail.setText("Email already exists");
-            requiredemail.setForeground(Color.RED);
-        } else {
-            email.setForeground(Color.BLACK);
-            requiredemail.setText("");
-        }
-
-        email.repaint();
     }//GEN-LAST:event_emailFocusLost
 
     private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
 
     }//GEN-LAST:event_emailActionPerformed
 
-    private void contactnumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_contactnumberFocusLost
-        Font smallFont = new Font("Arial", Font.PLAIN, 10);
-        contactnumber.setFont(smallFont);
-        requiredcnumber.setFont(smallFont);
+    private void changepassword1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_changepassword1FocusLost
+String pass = changepassword1.getText();
 
-        String user = contactnumber.getText();
+    if (pass.isEmpty()) {
+        changepassword1.setForeground(Color.RED);
+        requiredpassword.setText("Password is required");
+        requiredpassword.setForeground(Color.RED);
 
-        if (user.isEmpty()) {
-            contactnumber.setForeground(Color.RED);
-            requiredcnumber.setText("Contact Number is required");
-            requiredcnumber.setForeground(Color.RED);
-        } else if (!user.matches("\\d{11}")) {
-            contactnumber.setForeground(Color.RED);
-            requiredcnumber.setText("Contact Number must be exactly 11 digits");
-            requiredcnumber.setForeground(Color.RED);
-        } else {
-            contactnumber.setForeground(Color.BLACK);
-            requiredcnumber.setText("");
-        }
+    } else {
+        changepassword1.setForeground(Color.BLACK);
+        requiredpassword.setText("");
+    }
 
-        contactnumber.repaint();
-    }//GEN-LAST:event_contactnumberFocusLost
+    changepassword1.repaint();
+    }//GEN-LAST:event_changepassword1FocusLost
 
-    private void contactnumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactnumberActionPerformed
+    private void changepassword1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changepassword1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_contactnumberActionPerformed
+    }//GEN-LAST:event_changepassword1ActionPerformed
 
     private void SignupFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SignupFocusLost
 
     }//GEN-LAST:event_SignupFocusLost
 
     private void SignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupActionPerformed
-       
 
         if (signUpValidation()) {
 
-            connectDB con = new connectDB();
+    connectDB con = new connectDB();
 
-            con.updateData("UPDATE tbl_user SET u_firstname = '" + firstname.getText() + "', u_lastname = '" + lastname.getText() + "', u_email = '" + email.getText() + "',"
-                    + "u_contactnumber = '" + contactnumber.getText() + "' WHERE u_id = '"+idfieldtext.getText()+"'");
+    con.updateData("UPDATE tbl_user SET u_password = '" + changepassword1.getText() + "' " +
+        "WHERE u_id = '" + idfieldtext1.getText() + "'");
 
-            JOptionPane.showMessageDialog(this, "Account's Information Updated Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(this, "Password Updated Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-            accountmanager acc = new accountmanager();
-        acc.setVisible(true);
-        this.dispose();
+    accountmanager acc = new accountmanager();
+    acc.setVisible(true);
+    this.dispose();
 
-        } else {
+} else {
 
-            JOptionPane.showMessageDialog(this, "Edit Information error. Please fill all required field.", "Warning", JOptionPane.WARNING_MESSAGE);
+    JOptionPane.showMessageDialog(this, "Password update error. Please fill all required fields.", "Warning", JOptionPane.WARNING_MESSAGE);
 
-        }
+}
 
     }//GEN-LAST:event_SignupActionPerformed
 
     private void backloginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backloginMouseClicked
         accountmanager acc = new accountmanager();
-    acc.setVisible(true);
-    this.dispose();
+        acc.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_backloginMouseClicked
-private boolean signUpValidation() {
+
+    private void contactnumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_contactnumberFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contactnumberFocusLost
+
+    private void contactnumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactnumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contactnumberActionPerformed
+
+    
+    private boolean signUpValidation() {
         boolean valid = true;
-        
- //First name Validation       
- String user = firstname.getText();
 
-if (user.isEmpty()) {
-    firstname.setForeground(Color.RED);
-    requiredfname.setText("First Name is required");
-    requiredfname.setForeground(Color.RED);
-    valid = false;
-} else {
-    firstname.setForeground(Color.BLACK);
-    requiredfname.setText("");
-}
+        // Password Validation
+        String pass = changepassword1.getText();
+        if (pass.isEmpty()) {
+            changepassword1.setForeground(Color.RED);
+            requiredpassword.setText("Password is required");
+            requiredpassword.setForeground(Color.RED);
+            valid = false;
+        } else {
+            changepassword1.setForeground(Color.BLACK);
+            requiredpassword.setText("");
+        }
 
-firstname.repaint();
+        // Additional validation for other fields can be added here
 
-
-// Last name Validation
-
-String last = lastname.getText();
-
-if (last.isEmpty()) {
-    lastname.setForeground(Color.RED);
-    requiredlname.setText("Last Name is required");
-    requiredlname.setForeground(Color.RED);
-    valid = false;
-} else {
-    lastname.setForeground(Color.BLACK);
-    requiredlname.setText("");
-}
-
-lastname.repaint();
-
-// Email Validation
-
-String email1 = email.getText();
-String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-if (email1.isEmpty()) {
-    email.setForeground(Color.RED);
-    requiredemail.setText("Email is required");
-    requiredemail.setForeground(Color.RED);
-    valid = false;
-} else if (!email1.matches(emailRegex)) {
-    email.setForeground(Color.RED);
-    requiredemail.setText("Email is invalid");
-    requiredemail.setForeground(Color.RED);
-    valid = false;
-} else if (emailExists(email1)) {
-    email.setForeground(Color.RED);
-    requiredemail.setText("Email already exists");
-    requiredemail.setForeground(Color.RED);
-    valid = false;
-} else {
-    email.setForeground(Color.BLACK);
-    requiredemail.setText("");
-}
-
-email.repaint();
-
-// Contact Number Validation
-
-String con = contactnumber.getText();
-
-if (con.isEmpty()) {
-    contactnumber.setForeground(Color.RED);
-    requiredcnumber.setText("Contact Number is required");
-    requiredcnumber.setForeground(Color.RED);
-    valid = false;
-} else if (!con.matches("\\d{11}")) { 
-    contactnumber.setForeground(Color.RED);
-    requiredcnumber.setText("Contact Number must be exactly 11 digits");
-    requiredcnumber.setForeground(Color.RED);
-    valid = false;
-} else {
-    contactnumber.setForeground(Color.BLACK);
-    requiredcnumber.setText("");
-}
-
-contactnumber.repaint();
-
-
- 
+        changepassword1.repaint();
         return valid;
-        
-}
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -531,18 +447,18 @@ contactnumber.repaint();
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(editaccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(changepassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(editaccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(changepassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(editaccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(changepassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(editaccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(changepassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+                java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {                
 
                 String id = null;
@@ -551,7 +467,7 @@ contactnumber.repaint();
                 String pnum = null;
                 String eMail = null;
 
-                new editaccount(id, fname, lname, pnum, eMail).setVisible(true);
+                new changepassword(id, fname, lname, pnum, eMail).setVisible(true);
             
             }
         });
@@ -560,22 +476,25 @@ contactnumber.repaint();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Signup;
     private javax.swing.JLabel backlogin;
+    private javax.swing.JTextField changepassword1;
     private javax.swing.JLabel cnumbertext;
     private javax.swing.JTextField contactnumber;
     private javax.swing.JTextField email;
     private javax.swing.JLabel emailtext;
     private javax.swing.JTextField firstname;
-    private javax.swing.JLabel idfield;
     private javax.swing.JLabel idfieldtext;
+    private javax.swing.JLabel idfieldtext1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField lastname;
     private javax.swing.JLabel lastnametext;
     private javax.swing.JLabel logintext;
+    private javax.swing.JLabel passwordtext;
     private javax.swing.JLabel requiredcnumber;
     private javax.swing.JLabel requiredemail;
     private javax.swing.JLabel requiredfname;
     private javax.swing.JLabel requiredlname;
+    private javax.swing.JLabel requiredpassword;
     // End of variables declaration//GEN-END:variables
 }
