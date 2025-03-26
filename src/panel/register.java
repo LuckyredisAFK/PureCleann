@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import config.hasher;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
@@ -235,6 +237,11 @@ public class register extends javax.swing.JFrame {
                 passwordFocusLost(evt);
             }
         });
+        password.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordActionPerformed(evt);
+            }
+        });
 
         backlogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/backlogin1.png"))); // NOI18N
         backlogin.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -344,29 +351,34 @@ public class register extends javax.swing.JFrame {
     }//GEN-LAST:event_firstnameActionPerformed
 
     private void SignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupActionPerformed
-        RegisterSuccess.pack();
-RegisterError.pack();
+
+
 
 if (signUpValidation()) {
-
     connectDB con = new connectDB();
+    hasher hasher = new hasher();
 
-    con.insertData("INSERT INTO tbl_user (u_firstname, u_lastname, u_email, u_contactnumber, u_password, u_type, u_status) " +
+    // Hash the password before storing it
+    String hashedPassword = hasher.hashPassword(password.getText());
+
+    con.insertData("INSERT INTO tbl_user (u_firstname, u_lastname, u_email, u_contactnumber, u_hashpw, u_type, u_status) " +
             "VALUES ('" + firstname.getText() + "','" + lastname.getText() + "','" + email.getText() + "'," +
-            "'" + contactnumber.getText() + "','" + password.getText() + "', 'User', 'Pending')");
+            "'" + contactnumber.getText() + "','" + hashedPassword + "', 'Employee', 'Pending')");
 
     JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
     login lg = new login();
     lg.setVisible(true);
     this.dispose();
-
 } else {
-
-    RegisterError.setVisible(true);
-    RegisterError.setLocationRelativeTo(null);
-
+    JOptionPane.showMessageDialog(this, "Sign up error. Please fill all required fields.", "Warning", JOptionPane.WARNING_MESSAGE);
 }
+
+
+
+
+
+
     }//GEN-LAST:event_SignupActionPerformed
 
     private void firstnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_firstnameFocusLost
@@ -516,6 +528,10 @@ password.repaint();
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordActionPerformed
 
     
     private boolean signUpValidation() {

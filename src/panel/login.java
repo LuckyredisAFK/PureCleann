@@ -7,6 +7,7 @@ package panel;
 
 import admin.adminDB;
 import config.connectDB;
+import config.hasher;
 import config.session;
 import java.awt.Color;
 import java.awt.Font;
@@ -33,25 +34,30 @@ public class login extends javax.swing.JFrame {
     
     
     public String[] loginAcc(String email, String password) {
+    connectDB con = new connectDB();
 
-        connectDB con = new connectDB();
+    try {
+        String query = "SELECT u_hashpw, u_type, u_status FROM tbl_user WHERE u_email = ?";
+        PreparedStatement pstmt = con.getConnection().prepareStatement(query);
+        pstmt.setString(1, email.trim());
+        ResultSet resultSet = pstmt.executeQuery();
 
-        try {
-            String query = "SELECT * FROM tbl_user WHERE u_email = ? AND u_password = ?";
-            PreparedStatement pstmt = con.getConnection().prepareStatement(query);
-            pstmt.setString(1, email.trim());
-            pstmt.setString(2, password.trim());
-            ResultSet resultSet = pstmt.executeQuery();
+        if (resultSet.next()) {
+            String storedHashedPassword = resultSet.getString("u_hashpw");
+            String hashedInputPassword = hasher.hashPassword(password); // Hash input password
 
-            if (resultSet.next()) {
-                return new String[]{resultSet.getString("u_type").trim(), resultSet.getString("u_status")};
+            // Compare hashed input with stored hash
+            if (hashedInputPassword.equals(storedHashedPassword)) {
+                return new String[]{resultSet.getString("u_type").trim(), resultSet.getString("u_status").trim()};
             }
-
-        } catch (SQLException ex) {
-
         }
-        return null;
+    } catch (SQLException ex) {
+        ex.printStackTrace();
     }
+    return null; // Return null if login fails
+}
+
+
     
     public String[] getUserDetails(String email) {
     connectDB con = new connectDB();
@@ -339,8 +345,8 @@ try {
 } catch (Exception e) {
     JOptionPane.showMessageDialog(this, "Error during login: " + e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
     e.printStackTrace();
-}
 
+}
 
 
     }//GEN-LAST:event_loginbuttonActionPerformed

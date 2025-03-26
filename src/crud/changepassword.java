@@ -7,8 +7,11 @@ package crud;
 
 import admin.accountmanager;
 import config.connectDB;
+import config.hasher;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -374,23 +377,44 @@ String pass = changepassword1.getText();
     private void SignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupActionPerformed
 
         if (signUpValidation()) {
-
     connectDB con = new connectDB();
+    hasher hasher = new hasher();
 
-    con.updateData("UPDATE tbl_user SET u_password = '" + changepassword1.getText() + "' " +
-        "WHERE u_id = '" + idfieldtext1.getText() + "'");
+    String userId = idfieldtext.getText().trim();
+    String newPassword = changepassword1.getText().trim();
 
-    JOptionPane.showMessageDialog(this, "Password Updated Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    // Hash the new password
+    String hashedPassword = hasher.hashPassword(newPassword);
 
-    accountmanager acc = new accountmanager();
-    acc.setVisible(true);
-    this.dispose();
+    try {
+        String query = "UPDATE tbl_user SET u_hashpw = ? WHERE u_id = ?";
+        PreparedStatement pstmt = con.getConnection().prepareStatement(query);
+        pstmt.setString(1, hashedPassword);
+        pstmt.setString(2, userId);
 
+        int rowsUpdated = pstmt.executeUpdate(); // Execute and get affected rows
+
+        if (rowsUpdated > 0) {
+            JOptionPane.showMessageDialog(this, "Password Updated Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            accountmanager acc = new accountmanager();
+            acc.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "User ID not found. Password not updated.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Update failed. No rows affected.");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
 } else {
-
     JOptionPane.showMessageDialog(this, "Password update error. Please fill all required fields.", "Warning", JOptionPane.WARNING_MESSAGE);
-
 }
+
+
+
+
+
 
     }//GEN-LAST:event_SignupActionPerformed
 
