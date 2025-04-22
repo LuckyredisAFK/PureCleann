@@ -6,7 +6,9 @@
 package crud;
 
 import admin.accountmanager;
+import config.DBLogger;
 import config.connectDB;
+import config.session;
 import java.awt.Color;
 import java.awt.Font;
 import java.sql.PreparedStatement;
@@ -406,6 +408,10 @@ public class editaccount extends javax.swing.JFrame {
 
             con.updateData("UPDATE tbl_user SET u_firstname = '" + firstname.getText() + "', u_lastname = '" + lastname.getText() + "', u_email = '" + email.getText() + "',"
                     + "u_contactnumber = '" + contactnumber.getText() + "' WHERE u_id = '"+idfieldtext.getText()+"'");
+            
+            // ✅ Log the update
+    session sess = session.getInstance();
+    DBLogger.log(sess.getUsername(), "Updated user account with email: " + email.getText());
 
             JOptionPane.showMessageDialog(this, "Account's Information Updated Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 

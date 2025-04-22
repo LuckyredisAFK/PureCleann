@@ -27,19 +27,34 @@ public class adminDB extends javax.swing.JFrame {
         displayData();
     }
     
-    public void displayData(){
+    public void displayData() {
+    try {
+        connectDB dbc = new connectDB();
         
-        try{
-            connectDB dbc = new connectDB();
-            ResultSet rs = dbc.getData("SELECT * FROM tbl_user");           
-            overview.setModel(DbUtils.resultSetToTableModel(rs));
-            
-            
-        }catch(SQLException ex){
-            System.out.println("Errors"+ex.getMessage());
-        }
+        // Select only the specific columns from tbl_user
+        String query = "SELECT u_id, u_firstname, u_lastname, u_contactnumber, u_type, u_status FROM tbl_user";
+        ResultSet rs = dbc.getData(query);
         
+        // Use DbUtils to set the result set to the table
+        overview.setModel(DbUtils.resultSetToTableModel(rs));
+
+        // Change column titles
+        overview.getColumnModel().getColumn(0).setHeaderValue("ID");
+        overview.getColumnModel().getColumn(1).setHeaderValue("First Name");
+        overview.getColumnModel().getColumn(2).setHeaderValue("Last Name");
+        overview.getColumnModel().getColumn(3).setHeaderValue("Contact Number");
+        overview.getColumnModel().getColumn(4).setHeaderValue("Role");
+        overview.getColumnModel().getColumn(5).setHeaderValue("Status");
+        
+        // Refresh the table to apply the new headers
+        overview.getTableHeader().repaint();
+        
+    } catch (SQLException ex) {
+        System.out.println("Errors: " + ex.getMessage());
     }
+}
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -69,8 +84,8 @@ public class adminDB extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         mbg.setBackground(new java.awt.Color(255, 204, 204));
@@ -108,13 +123,13 @@ public class adminDB extends javax.swing.JFrame {
 
         overview.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "First Name", "Last Name", "Email", "Contact Number", "Role", "Status"
             }
         ));
         jScrollPane1.setViewportView(overview);
@@ -185,6 +200,15 @@ public class adminDB extends javax.swing.JFrame {
         });
         mbg.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 90, 30));
 
+        jLabel12.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel12.setText("LOGS");
+        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel12MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 50, 30));
+
         getContentPane().add(mbg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 510));
 
         pack();
@@ -212,6 +236,7 @@ public class adminDB extends javax.swing.JFrame {
         account acc = new account();
 
         acc.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jLabel10MouseClicked
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
@@ -227,6 +252,13 @@ public class adminDB extends javax.swing.JFrame {
         db.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
+        adminlogs log = new adminlogs();
+
+        log.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel12MouseClicked
 
     /**
      * @param args the command line arguments
@@ -267,6 +299,7 @@ public class adminDB extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

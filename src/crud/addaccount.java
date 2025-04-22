@@ -6,7 +6,9 @@
 package crud;
 
 import admin.accountmanager;
+import config.DBLogger;
 import config.connectDB;
+import config.session;
 import java.awt.Color;
 import java.awt.Font;
 import java.sql.PreparedStatement;
@@ -333,9 +335,13 @@ if (signUpValidation()) {
     // Get the selected item from the type dropdown
     String selectedType = role.getSelectedItem().toString(); 
 
-    con.insertData("INSERT INTO tbl_user (u_firstname, u_lastname, u_email, u_contactnumber, u_password, u_type, u_status) " +
+    con.insertData("INSERT INTO tbl_user (u_firstname, u_lastname, u_email, u_contactnumber, u_hashpw, u_type, u_status) " +
         "VALUES ('" + firstname.getText() + "','" + lastname.getText() + "','" + email.getText() + "'," +
         "'" + contactnumber.getText() + "','" + password.getText() + "', '" + selectedType + "', 'Pending')");
+    
+     // ✅ Log the account creation (email only)
+session sess = session.getInstance();
+DBLogger.log(sess.getUsername(), "Added a new account with email: " + email.getText());
 
     JOptionPane.showMessageDialog(this, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 

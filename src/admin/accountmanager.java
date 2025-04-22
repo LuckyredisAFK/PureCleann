@@ -5,7 +5,9 @@
  */
 package admin;
 
+import config.DBLogger;
 import config.connectDB;
+import config.session;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -31,19 +33,33 @@ public class accountmanager extends javax.swing.JFrame {
         acc.setVisible(false);
     }
     
-    public void displayData(){
+    public void displayData() {
+    try {
+        connectDB dbc = new connectDB();
         
-        try{
-            connectDB dbc = new connectDB();
-            ResultSet rs = dbc.getData("SELECT * FROM tbl_user");           
-            overview.setModel(DbUtils.resultSetToTableModel(rs));
-            
-            
-        }catch(SQLException ex){
-            System.out.println("Errors"+ex.getMessage());
-        }
+        // Select only the specific columns from tbl_user
+        String query = "SELECT u_id, u_firstname, u_lastname, u_contactnumber, u_type, u_status FROM tbl_user";
+        ResultSet rs = dbc.getData(query);
         
+        // Use DbUtils to set the result set to the table
+        overview.setModel(DbUtils.resultSetToTableModel(rs));
+
+        // Change column titles
+        overview.getColumnModel().getColumn(0).setHeaderValue("ID");
+        overview.getColumnModel().getColumn(1).setHeaderValue("First Name");
+        overview.getColumnModel().getColumn(2).setHeaderValue("Last Name");
+        overview.getColumnModel().getColumn(3).setHeaderValue("Contact Number");
+        overview.getColumnModel().getColumn(4).setHeaderValue("Role");
+        overview.getColumnModel().getColumn(5).setHeaderValue("Status");
+        
+        // Refresh the table to apply the new headers
+        overview.getTableHeader().repaint();
+        
+    } catch (SQLException ex) {
+        System.out.println("Errors: " + ex.getMessage());
     }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -69,8 +85,7 @@ public class accountmanager extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel6 = new javax.swing.JLabel();
 
         mbg.setBackground(new java.awt.Color(255, 204, 204));
         mbg.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -185,6 +200,15 @@ public class accountmanager extends javax.swing.JFrame {
         });
         mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 110, 30));
 
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel6.setText("LOGS");
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 50, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -214,6 +238,7 @@ public class accountmanager extends javax.swing.JFrame {
         account acc = new account();
 
         acc.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel8FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jLabel8FocusLost
@@ -241,6 +266,12 @@ public class accountmanager extends javax.swing.JFrame {
         connectDB con = new connectDB();
         
         con.updateData("UPDATE tbl_user SET u_status = 'Active' WHERE u_id = '"+id+"'"); 
+        
+        // ✅ Add logging here
+session sess = session.getInstance();
+DBLogger.log(sess.getUsername(), "Activated user with ID: " + id);
+displayData();
+
     }//GEN-LAST:event_activateActionPerformed
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
@@ -268,8 +299,11 @@ public class accountmanager extends javax.swing.JFrame {
             // Run SQL DELETE command here
             connectDB con = new connectDB();
             String query = "DELETE FROM tbl_user WHERE u_id = '" + id + "'";
+            
             con.deleteData(query);
-
+ // ✅ Log the deletion
+    session sess = session.getInstance();
+    DBLogger.log(sess.getUsername(), "Deleted user with ID: " + id);
             // Refresh table
             displayData();
 
@@ -312,6 +346,12 @@ public class accountmanager extends javax.swing.JFrame {
 
         eda.setVisible(true);
     }//GEN-LAST:event_editActionPerformed
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+adminlogs log = new adminlogs();
+
+        log.setVisible(true);
+        this.dispose();    }//GEN-LAST:event_jLabel6MouseClicked
 
     /**
      * @param args the command line arguments
@@ -356,6 +396,7 @@ public class accountmanager extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

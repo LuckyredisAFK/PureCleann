@@ -6,6 +6,7 @@
 package panel;
 
 import admin.adminDB;
+import config.DBLogger;
 import config.connectDB;
 import config.hasher;
 import config.session;
@@ -102,7 +103,7 @@ public class login extends javax.swing.JFrame {
         logintext = new javax.swing.JLabel();
         registerbutton = new javax.swing.JLabel();
         loginbutton = new javax.swing.JButton();
-        forgotpassword = new javax.swing.JLabel();
+        forgotpassword1 = new javax.swing.JLabel();
         emailtext = new javax.swing.JLabel();
         passtext = new javax.swing.JLabel();
         requireduser = new javax.swing.JLabel();
@@ -153,7 +154,12 @@ public class login extends javax.swing.JFrame {
             }
         });
 
-        forgotpassword.setText("Forgot password");
+        forgotpassword1.setText("Forgot password");
+        forgotpassword1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                forgotpassword1MouseClicked(evt);
+            }
+        });
 
         emailtext.setText("Email");
 
@@ -173,7 +179,7 @@ public class login extends javax.swing.JFrame {
                                 .addComponent(emailtext)
                                 .addComponent(logintext)
                                 .addComponent(registerbutton)
-                                .addComponent(forgotpassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(forgotpassword1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(username)
                                 .addComponent(loginbutton, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                                 .addComponent(passtext)
@@ -205,7 +211,7 @@ public class login extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(loginbutton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(forgotpassword)
+                .addComponent(forgotpassword1)
                 .addGap(24, 24, 24))
         );
 
@@ -283,73 +289,91 @@ password.repaint();
 
     private void loginbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbuttonActionPerformed
         String user = username.getText().trim();
-String pass = password.getText().trim();
+    String pass = password.getText().trim();
 
-if (user.isEmpty() || pass.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Username and/or password cannot be empty.", "Login Error", JOptionPane.ERROR_MESSAGE);
-    username.requestFocus();
-    return;
-}
-
-try {
-    // Directly use the entered username and password without hashing
-    String[] loginData = loginAcc(user, pass);
-
-    if (loginData == null) {
-        JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
-        password.requestFocus();
+    if (user.isEmpty() || pass.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Username and/or password cannot be empty.", "Login Error", JOptionPane.ERROR_MESSAGE);
+        username.requestFocus();
         return;
     }
 
-    String[] userDetails = getUserDetails(user);
+    try {
+        // Directly use the entered username and password without hashing
+        String[] loginData = loginAcc(user, pass);
 
-    String userID = userDetails[0];
-    String firstName = userDetails[1];
-    String lastName = userDetails[2];
-    String email = userDetails[3];
-    String contactNumber = userDetails[4];
-    String accType = loginData[0];
-    String accStatus = loginData[1];
-
-    if (!"active".equalsIgnoreCase(accStatus)) {
-        JOptionPane.showMessageDialog(this, "Your account is still pending. Please contact the administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    session sess = session.getInstance();
-    sess.setU_id(userID);
-    sess.setUsername(user);
-    sess.setFirstName(firstName);
-    sess.setLastName(lastName);
-    sess.setEmail(email);
-    sess.setContact(contactNumber);
-    sess.setAcc_type(accType);
-    sess.setAcc_status(accStatus);
-
-    if (accType != null) {
-        if ("Admin".equalsIgnoreCase(accType)) {
-            new adminDB().setVisible(true);
-        } else if ("Employee".equalsIgnoreCase(accType)) {
-            new UserDB().setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "Unknown user type!", "Login Error", JOptionPane.ERROR_MESSAGE);
+        if (loginData == null) {
+            // Failed login attempt
+            DBLogger.log(user, "Failed login attempt");  // Log failed attempt
+            JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            password.requestFocus();
             return;
         }
 
-        this.dispose(); // Close login window
-    } else {
-        JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
-        password.requestFocus();
+        String[] userDetails = getUserDetails(user);
+
+        String userID = userDetails[0];
+        String firstName = userDetails[1];
+        String lastName = userDetails[2];
+        String email = userDetails[3];
+        String contactNumber = userDetails[4];
+        String accType = loginData[0];
+        String accStatus = loginData[1];
+
+        if (!"active".equalsIgnoreCase(accStatus)) {
+            // Account is not active
+            DBLogger.log(user, "Inactive account login attempt");  // Log attempt with inactive account
+            JOptionPane.showMessageDialog(this, "Your account is still pending. Please contact the administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        session sess = session.getInstance();
+        sess.setU_id(userID);
+        sess.setUsername(user);
+        sess.setFirstName(firstName);
+        sess.setLastName(lastName);
+        sess.setEmail(email);
+        sess.setContact(contactNumber);
+        sess.setAcc_type(accType);
+        sess.setAcc_status(accStatus);
+
+        if (accType != null) {
+            if ("Admin".equalsIgnoreCase(accType)) {
+                DBLogger.log(user, "Admin logged in");  // Log successful login for Admin
+                new adminDB().setVisible(true);
+            } else if ("Employee".equalsIgnoreCase(accType)) {
+                DBLogger.log(user, "Employee logged in");  // Log successful login for Employee
+                new UserDB().setVisible(true);
+            } else {
+                // Invalid user type
+                DBLogger.log(user, "Unknown user type login attempt");  // Log unknown user type attempt
+                JOptionPane.showMessageDialog(this, "Unknown user type!", "Login Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            this.dispose(); // Close login window
+        } else {
+            // Invalid login credentials
+            DBLogger.log(user, "Incorrect login credentials");  // Log incorrect credentials attempt
+            JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            password.requestFocus();
+        }
+
+    } catch (Exception e) {
+        // Log error during login
+        DBLogger.log(user, "Error during login: " + e.getMessage());  // Log error
+        JOptionPane.showMessageDialog(this, "Error during login: " + e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
 
-} catch (Exception e) {
-    JOptionPane.showMessageDialog(this, "Error during login: " + e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
-    e.printStackTrace();
-
-}
 
 
     }//GEN-LAST:event_loginbuttonActionPerformed
+
+    private void forgotpassword1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forgotpassword1MouseClicked
+        forgotpassword fp = new forgotpassword();
+        fp.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_forgotpassword1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -388,7 +412,7 @@ try {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel emailtext;
-    private javax.swing.JLabel forgotpassword;
+    private javax.swing.JLabel forgotpassword1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

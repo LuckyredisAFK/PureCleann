@@ -3,15 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/admin/accountmanager.java</file>
-            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/config/session.java</file>
-            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/admin/account.java</file>
-            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/crud/editaccount.java</file>
-            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/panel/login.java</file>
-            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/panel/register.java</file>
-            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/config/hasher.java</file>
+            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/crud/resetpassword.java</file>
+            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/panel/forgotpassword.java</file>
             <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/crud/changepassword.java</file>
-            <file>file:/C:/Users/vienz/OneDrive/Desktop/purecleann/src/crud/addaccount.java</file>
         </group>
     </open-files>
 </project-private>

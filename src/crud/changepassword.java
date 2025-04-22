@@ -6,8 +6,10 @@
 package crud;
 
 import admin.accountmanager;
+import config.DBLogger;
 import config.connectDB;
 import config.hasher;
+import config.session;
 import java.awt.Color;
 import java.awt.Font;
 import java.sql.PreparedStatement;
@@ -395,6 +397,11 @@ String pass = changepassword1.getText();
         int rowsUpdated = pstmt.executeUpdate(); // Execute and get affected rows
 
         if (rowsUpdated > 0) {
+            
+            // ✅ Log the password change action after a successful update
+            session sess = session.getInstance();  // Get the current session
+            DBLogger.log(sess.getUsername(), "Changed password for User ID: " + userId);  // Log the action
+            
             JOptionPane.showMessageDialog(this, "Password Updated Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             accountmanager acc = new accountmanager();
             acc.setVisible(true);
