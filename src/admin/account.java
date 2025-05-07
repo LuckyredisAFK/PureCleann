@@ -8,7 +8,16 @@ package admin;
 import config.session;
 import crud.changepassword;
 import crud.editaccount;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import panel.login;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;    
 
 /**
  *
@@ -39,6 +48,17 @@ public class account extends javax.swing.JFrame {
         cnum.setText("Contact Number: " +session.getContact());
         
         role.setText("Role: " + session.getAcc_type());
+        
+         try {
+        File imgFile = new File("profilepics/user_" + session.getU_id() + ".png");
+        if (imgFile.exists()) {
+            Image img = ImageIO.read(imgFile);
+            img = img.getScaledInstance(profilepic.getWidth(), profilepic.getHeight(), Image.SCALE_SMOOTH);
+            profilepic.setIcon(new ImageIcon(img));
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
      
 
     }
@@ -61,12 +81,15 @@ public class account extends javax.swing.JFrame {
         email = new javax.swing.JLabel();
         name = new javax.swing.JLabel();
         changepassword = new javax.swing.JButton();
+        changeProfileButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -102,6 +125,14 @@ public class account extends javax.swing.JFrame {
         });
         jPanel5.add(changepassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, 20));
 
+        changeProfileButton.setText("Change Profile Picture");
+        changeProfileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeProfileButtonActionPerformed(evt);
+            }
+        });
+        jPanel5.add(changeProfileButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, -1, 20));
+
         jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 830, 490));
 
         mbg.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 850, 510));
@@ -109,15 +140,6 @@ public class account extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Microsoft JhengHei", 1, 18)); // NOI18N
         jLabel4.setText("PureClean");
         mbg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 90, -1));
-
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel5.setText("PROFILE");
-        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel5MouseClicked(evt);
-            }
-        });
-        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, 70, 30));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/backlogin1.png"))); // NOI18N
         jLabel8.setText("Logout");
@@ -133,45 +155,65 @@ public class account extends javax.swing.JFrame {
         });
         mbg.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, -1, -1));
 
-        jLabel9.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel9.setText("DASHBOARD");
-        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel11.setText("RESERVATION");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel9MouseClicked(evt);
+                jLabel11MouseClicked(evt);
             }
         });
-        mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 110, 30));
+        mbg.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 120, 30));
 
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel10.setText("ACCOUNT");
+        jLabel10.setText("DASHBOARD");
         jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel10MouseClicked(evt);
             }
         });
-        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 90, 30));
+        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 110, 30));
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel6.setText("LOGS");
-        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel9.setText("ACCOUNT");
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel6MouseClicked(evt);
+                jLabel9MouseClicked(evt);
             }
         });
-        mbg.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 50, 30));
+        mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 90, 30));
+
+        jLabel15.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel15.setText("REPORTS");
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel15MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 90, 30));
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel5.setText("PROFILE");
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 70, 30));
+
+        jLabel13.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel13.setText("LOGS");
+        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 50, 30));
 
         getContentPane().add(mbg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 510));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        account acc = new account();
-
-        acc.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel8FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jLabel8FocusLost
         // TODO add your handling code here:
@@ -183,20 +225,6 @@ public class account extends javax.swing.JFrame {
         log.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
-
-    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
-        accountmanager man = new accountmanager();
-
-        man.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel10MouseClicked
-
-    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        adminDB db = new adminDB();
-
-        db.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel9MouseClicked
 
     private void changepasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changepasswordActionPerformed
         changepassword acc = new changepassword(
@@ -212,12 +240,72 @@ public class account extends javax.swing.JFrame {
         
     }//GEN-LAST:event_changepasswordActionPerformed
 
-    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+    private void changeProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeProfileButtonActionPerformed
+      JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Select Profile Picture");
+    fileChooser.setAcceptAllFileFilterUsed(false);
+    fileChooser.addChoosableFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Image Files", "jpg", "png", "jpeg", "gif"));
+
+    int result = fileChooser.showOpenDialog(this);
+    if (result == JFileChooser.APPROVE_OPTION) {
+        File selectedFile = fileChooser.getSelectedFile();
+        try {
+            // Create folder if it doesn't exist
+            File directory = new File("profilepics");
+            directory.mkdirs();
+
+            // Copy selected image to profilepics folder with user ID as filename
+            File destFile = new File("profilepics/user_" + session.getU_id() + ".png");
+            Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            // Load and show image in JLabel
+            Image img = ImageIO.read(destFile);
+            img = img.getScaledInstance(profilepic.getWidth(), profilepic.getHeight(), Image.SCALE_SMOOTH);
+            profilepic.setIcon(new ImageIcon(img));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load or save image.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    }//GEN-LAST:event_changeProfileButtonActionPerformed
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        adminreservation reservation = new adminreservation();  // Create a new instance of reservation panel
+        reservation.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel11MouseClicked
+
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+
+    }//GEN-LAST:event_jLabel10MouseClicked
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        accountmanager man = new accountmanager();
+
+        man.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
+        adminreport arp = new adminreport();
+        arp.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel15MouseClicked
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        account acc = new account();
+
+        acc.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
         adminlogs log = new adminlogs();
 
         log.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jLabel6MouseClicked
+    }//GEN-LAST:event_jLabel13MouseClicked
 
     /**
      * @param args the command line arguments
@@ -255,13 +343,16 @@ public class account extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton changeProfileButton;
     private javax.swing.JButton changepassword;
     private javax.swing.JLabel cnum;
     private javax.swing.JLabel email;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

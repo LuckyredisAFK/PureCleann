@@ -39,6 +39,7 @@ public class forgotpassword extends javax.swing.JFrame {
         email1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         submit = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -70,6 +71,8 @@ public class forgotpassword extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("Email");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -84,7 +87,10 @@ public class forgotpassword extends javax.swing.JFrame {
                         .addComponent(email1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(169, 169, 169)
-                        .addComponent(submit)))
+                        .addComponent(submit))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(190, 190, 190)
+                        .addComponent(jLabel2)))
                 .addContainerGap(90, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -92,11 +98,13 @@ public class forgotpassword extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(email1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(submit)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 440, 190));
@@ -111,32 +119,29 @@ public class forgotpassword extends javax.swing.JFrame {
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         String email = email1.getText().trim();
-        String id = null;
-         String eMail = null;
 
-        if (email.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please enter your email.");
-            return;
+    if (email.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Please enter your email.");
+        return;
+    }
+
+    try (Connection conn = connectDB.getConnection()) {
+        String sql = "SELECT * FROM tbl_user WHERE u_email = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, email);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            dispose(); // Close the ForgotEmail JFrame
+            new resetpassword(rs.getString("u_email")).setVisible(true); // Use the actual email
+        } else {
+            JOptionPane.showMessageDialog(null, "Email doesn't exist.");
         }
 
-        try (Connection conn = connectDB.getConnection()) {
-            String sql = "SELECT * FROM tbl_user WHERE u_email = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                dispose(); // Close the ForgotEmail JFrame
-                new resetpassword(eMail).setVisible(true); // Open reset form
-            } else {
-                JOptionPane.showMessageDialog(null, "Email doesn't exist.");
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Database error.");
-        
-        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Database error.");
+    }
     }//GEN-LAST:event_submitActionPerformed
 
     private void email1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_email1FocusGained
@@ -192,6 +197,7 @@ public class forgotpassword extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField email1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton submit;
     // End of variables declaration//GEN-END:variables

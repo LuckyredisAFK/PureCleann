@@ -70,17 +70,14 @@ public class adminlogs extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         overview = new javax.swing.JTable();
-        activate = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
-        addaccount = new javax.swing.JButton();
-        delete = new javax.swing.JButton();
-        edit = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,15 +110,7 @@ public class adminlogs extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(overview);
 
-        jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 790, 270));
-
-        activate.setText("Activate");
-        activate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                activateActionPerformed(evt);
-            }
-        });
-        jPanel5.add(activate, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 170, -1, -1));
+        jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 790, 430));
 
         refresh.setText("REFRESH");
         refresh.addActionListener(new java.awt.event.ActionListener() {
@@ -129,31 +118,7 @@ public class adminlogs extends javax.swing.JFrame {
                 refreshActionPerformed(evt);
             }
         });
-        jPanel5.add(refresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, -1, -1));
-
-        addaccount.setText("ADD ACCOUNT");
-        addaccount.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addaccountActionPerformed(evt);
-            }
-        });
-        jPanel5.add(addaccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 170, -1, -1));
-
-        delete.setText("DELETE");
-        delete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteActionPerformed(evt);
-            }
-        });
-        jPanel5.add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 170, -1, -1));
-
-        edit.setText("EDIT");
-        edit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editActionPerformed(evt);
-            }
-        });
-        jPanel5.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 170, -1, -1));
+        jPanel5.add(refresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, -1, -1));
 
         jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 830, 490));
 
@@ -170,7 +135,7 @@ public class adminlogs extends javax.swing.JFrame {
                 jLabel5MouseClicked(evt);
             }
         });
-        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, 70, 30));
+        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 70, 30));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/backlogin1.png"))); // NOI18N
         jLabel8.setText("Logout");
@@ -193,7 +158,7 @@ public class adminlogs extends javax.swing.JFrame {
                 jLabel9MouseClicked(evt);
             }
         });
-        mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 90, 30));
+        mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 90, 30));
 
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel10.setText("DASHBOARD");
@@ -202,7 +167,7 @@ public class adminlogs extends javax.swing.JFrame {
                 jLabel10MouseClicked(evt);
             }
         });
-        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 110, 30));
+        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 110, 30));
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel6.setText("LOGS");
@@ -211,7 +176,16 @@ public class adminlogs extends javax.swing.JFrame {
                 jLabel6MouseClicked(evt);
             }
         });
-        mbg.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 50, 30));
+        mbg.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 50, 30));
+
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel11.setText("RESERVATION");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 120, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -238,76 +212,9 @@ public class adminlogs extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void activateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activateActionPerformed
-        int selectedRow = overview.getSelectedRow();
-
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a row to edit.");
-            return;
-        }
-
-        String id = overview.getValueAt(selectedRow, 0).toString();
-
-        connectDB con = new connectDB();
-
-        con.updateData("UPDATE tbl_user SET u_status = 'Active' WHERE u_id = '"+id+"'");
-    }//GEN-LAST:event_activateActionPerformed
-
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
         loadLogs();
     }//GEN-LAST:event_refreshActionPerformed
-
-    private void addaccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addaccountActionPerformed
-        addaccount acc = new addaccount();
-        acc.setVisible(true);
-    }//GEN-LAST:event_addaccountActionPerformed
-
-    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        int selectedRow = overview.getSelectedRow();
-
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a row to delete.");
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this record?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            String id = overview.getValueAt(selectedRow, 0).toString();
-
-            // Run SQL DELETE command here
-            connectDB con = new connectDB();
-            String query = "DELETE FROM tbl_logs WHERE log_id = '" + id + "'";
-            con.deleteData(query);
-
-            // Refresh table
-            loadLogs();
-
-            JOptionPane.showMessageDialog(this, "User deleted successfully.");
-        }
-    }//GEN-LAST:event_deleteActionPerformed
-
-    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        int selectedRow = overview.getSelectedRow();
-
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a row to edit.");
-            return;
-        }
-
-        // Get row data
-        String id = overview.getValueAt(selectedRow, 0).toString();
-        String firstName = overview.getValueAt(selectedRow, 1).toString();
-        String lastName = overview.getValueAt(selectedRow, 2).toString();
-        String email = overview.getValueAt(selectedRow, 3).toString();
-        String phone = overview.getValueAt(selectedRow, 4).toString();
-        //        String uname = usersTable.getValueAt(selectedRow, 5).toString();
-        //        String passW = usersTable.getValueAt(selectedRow, 6).toString();
-
-        editaccount eda = new editaccount(id, firstName, lastName, email, phone);
-
-        eda.setVisible(true);
-    }//GEN-LAST:event_editActionPerformed
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         account acc = new account();
@@ -342,11 +249,12 @@ public class adminlogs extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel10MouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        adminlogs log = new adminlogs();
-
-        log.setVisible(true);
-        this.dispose();
+        
     }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel11MouseClicked
 
     /**
      * @param args the command line arguments
@@ -384,11 +292,8 @@ public class adminlogs extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton activate;
-    private javax.swing.JButton addaccount;
-    private javax.swing.JButton delete;
-    private javax.swing.JButton edit;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

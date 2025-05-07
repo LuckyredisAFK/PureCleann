@@ -23,8 +23,9 @@ import javax.swing.JOptionPane;
  *
  * @author vienz
  */
-public class login extends javax.swing.JFrame {
 
+public class login extends javax.swing.JFrame {
+public static int loggedInUserId;
     /**
      * Creates new form login
      */

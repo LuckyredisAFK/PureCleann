@@ -6,6 +6,7 @@
 package crud;
 
 import config.connectDB;
+import config.hasher;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +18,8 @@ import javax.swing.JOptionPane;
  */
 public class resetpassword extends javax.swing.JFrame {
     private String correctAnswer;
+    private String userIdentifier; 
+
 
     /**
      * Creates new form resetpassword
@@ -25,6 +28,7 @@ public class resetpassword extends javax.swing.JFrame {
         
     initComponents();
     loadSecurityInfo(userIdentifier);
+    this.userIdentifier = userIdentifier;
 
     }
 
@@ -96,7 +100,7 @@ public class resetpassword extends javax.swing.JFrame {
             }
         });
 
-        question1.setText("test");
+        question1.setText("Answer");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -111,17 +115,19 @@ public class resetpassword extends javax.swing.JFrame {
                                 .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addGap(64, 64, 64)
-                                    .addComponent(emailtext1))
-                                .addComponent(answer, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(emailtext1))))
                         .addComponent(logintext, javax.swing.GroupLayout.Alignment.TRAILING))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(167, 167, 167)
-                        .addComponent(question1)))
-                .addContainerGap(92, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Signup, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                            .addGap(76, 76, 76)
+                            .addComponent(Signup, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(91, 91, 91)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(question1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(answer, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,13 +138,13 @@ public class resetpassword extends javax.swing.JFrame {
                 .addComponent(emailtext1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(question1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(answer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(Signup, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(106, 106, 106))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 380, 240));
@@ -165,28 +171,43 @@ public class resetpassword extends javax.swing.JFrame {
 
     private void SignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupActionPerformed
 
-//        if (signUpValidation()) {
-//
-//            connectDB con = new connectDB();
-//
-//            con.updateData("UPDATE tbl_user SET u_firstname = '" + firstname.getText() + "', u_lastname = '" + lastname.getText() + "', u_email = '" + email.getText() + "',"
-//                + "u_contactnumber = '" + contactnumber.getText() + "' WHERE u_id = '"+idfieldtext.getText()+"'");
-//
-//            // ✅ Log the update
-//            session sess = session.getInstance();
-//            DBLogger.log(sess.getUsername(), "Updated user account with email: " + email.getText());
-//
-//            JOptionPane.showMessageDialog(this, "Account's Information Updated Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-//
-//            accountmanager acc = new accountmanager();
-//            acc.setVisible(true);
-//            this.dispose();
-//
-//        } else {
-//
-//            JOptionPane.showMessageDialog(this, "Edit Information error. Please fill all required field.", "Warning", JOptionPane.WARNING_MESSAGE);
-//
-//        }
+String userAnswer = answer.getText().trim();
+    String newPassword = password.getText().trim();
+
+    // Step 1: Check if the answer is correct
+    if (!userAnswer.equals(correctAnswer)) {
+        JOptionPane.showMessageDialog(this, "Incorrect answer to security question.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Step 2: Validate the new password (add your own validation rules here)
+    if (newPassword.isEmpty() || newPassword.length() < 6) {
+        JOptionPane.showMessageDialog(this, "Password must be at least 6 characters long.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Step 3: Hash the new password using the hasher class
+    String hashedPassword = hasher.hashPassword(newPassword);
+    
+    // Step 4: Update the password in the database
+    try (Connection conn = connectDB.getConnection()) {
+        String sql = "UPDATE tbl_user SET u_hashpw = ? WHERE u_email = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, hashedPassword); // Set the hashed password
+        stmt.setString(2, userIdentifier); // Use userIdentifier to find the user
+
+        int rowsUpdated = stmt.executeUpdate();
+        if (rowsUpdated > 0) {
+            JOptionPane.showMessageDialog(this, "Password successfully updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose(); // Close the form after success
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to update password.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error updating password.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     }//GEN-LAST:event_SignupActionPerformed
 
     private void passwordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordFocusLost
@@ -205,31 +226,29 @@ public class resetpassword extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_answerActionPerformed
 private void loadSecurityInfo(String email) {
-    
-    
-   try (Connection conn = connectDB.getConnection()) {
-        String sql = "SELECT u_question FROM tbl_user WHERE u_email = ?"; // You can use a constant or other criteria if you no longer use email
+    try (Connection conn = connectDB.getConnection()) {
+        String sql = "SELECT u_question, u_answer FROM tbl_user WHERE u_email = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
-        // Set some identifier to search for the user (this could be an ID or any unique field)
-        stmt.setString(1, "userIdentifier");  // replace with the actual user identifier (maybe from login or session)
-        
+        stmt.setString(1, email);
+
         ResultSet rs = stmt.executeQuery();
 
         if (rs.next()) {
             String question = rs.getString("u_question");
-
-            // Set the question text to the JLabel
-            question1.setText(question); // this updates the label with the question from the database
+            correctAnswer = rs.getString("u_answer"); // Store the answer for later verification
+            question1.setText(question); // Set the question label
+            
         } else {
             JOptionPane.showMessageDialog(this, "User not found or question not set.");
-            this.dispose(); // close form
+            this.dispose();
         }
     } catch (Exception ex) {
         ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error loading security question.");
     }
-
-
 }
+
+
     /**
      * @param args the command line arguments
      */
