@@ -32,8 +32,10 @@ public class UserDB extends javax.swing.JFrame {
         mbg = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -48,10 +50,6 @@ public class UserDB extends javax.swing.JFrame {
         jLabel4.setText("PureClean");
         mbg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 90, -1));
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel5.setText("DASHBOARD");
-        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 110, 30));
-
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/backlogin1.png"))); // NOI18N
         jLabel8.setText("Logout");
         jLabel8.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -65,6 +63,28 @@ public class UserDB extends javax.swing.JFrame {
             }
         });
         mbg.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel6.setText("DASHBOARD");
+        mbg.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 110, 30));
+
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel7.setText("PROFILE");
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 110, 30));
+
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel9.setText("RESERVATION");
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 140, 30));
 
         getContentPane().add(mbg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 510));
 
@@ -82,6 +102,18 @@ public class UserDB extends javax.swing.JFrame {
         log.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+ereservation reservation = new ereservation();  // Create a new instance of reservation panel
+        reservation.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        account acc = new account();
+        acc.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel7MouseClicked
 
     /**
      * @param args the command line arguments
@@ -121,8 +153,10 @@ public class UserDB extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel mbg;
     // End of variables declaration//GEN-END:variables

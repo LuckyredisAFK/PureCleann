@@ -29,29 +29,33 @@ public class adminreservation extends javax.swing.JFrame {
     public void displayData() {
     try {
         connectDB dbc = new connectDB();
-        
-        // Select only the specific columns from tbl_user
-        String query = "SELECT u_id, u_firstname, u_lastname, u_contactnumber, u_type, u_status FROM tbl_user";
+
+        // Select specific columns from tbl_logs
+        String query = "SELECT r_id, r_customername, r_type, r_creationdate, r_servicestartdate, r_status, r_cost, r_cnumber, r_location FROM tbl_reservation";
         ResultSet rs = dbc.getData(query);
-        
-        // Use DbUtils to set the result set to the table
+
+        // Set the result to the table using DbUtils
         overview.setModel(DbUtils.resultSetToTableModel(rs));
 
-        // Change column titles
+        // Set custom column headers
         overview.getColumnModel().getColumn(0).setHeaderValue("ID");
-        overview.getColumnModel().getColumn(1).setHeaderValue("First Name");
-        overview.getColumnModel().getColumn(2).setHeaderValue("Last Name");
-        overview.getColumnModel().getColumn(3).setHeaderValue("Contact Number");
-        overview.getColumnModel().getColumn(4).setHeaderValue("Role");
+        overview.getColumnModel().getColumn(1).setHeaderValue("Customer Name");
+        overview.getColumnModel().getColumn(2).setHeaderValue("Package");
+        overview.getColumnModel().getColumn(3).setHeaderValue("Date Created");
+        overview.getColumnModel().getColumn(4).setHeaderValue("Service Start Date");
         overview.getColumnModel().getColumn(5).setHeaderValue("Status");
-        
-        // Refresh the table to apply the new headers
+        overview.getColumnModel().getColumn(6).setHeaderValue("Cost");
+        overview.getColumnModel().getColumn(7).setHeaderValue("Contact Number");
+        overview.getColumnModel().getColumn(8).setHeaderValue("Address");
+
+        // Refresh the table header
         overview.getTableHeader().repaint();
-        
+
     } catch (SQLException ex) {
         System.out.println("Errors: " + ex.getMessage());
     }
 }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
