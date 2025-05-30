@@ -82,10 +82,8 @@ public class accountmanager extends javax.swing.JFrame {
         edit = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
 
@@ -175,15 +173,6 @@ public class accountmanager extends javax.swing.JFrame {
         });
         mbg.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, -1, -1));
 
-        jLabel11.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel11.setText("RESERVATION");
-        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel11MouseClicked(evt);
-            }
-        });
-        mbg.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 120, 30));
-
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel10.setText("DASHBOARD");
         jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -191,7 +180,7 @@ public class accountmanager extends javax.swing.JFrame {
                 jLabel10MouseClicked(evt);
             }
         });
-        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 110, 30));
+        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 110, 30));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel9.setText("ACCOUNT");
@@ -202,15 +191,6 @@ public class accountmanager extends javax.swing.JFrame {
         });
         mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 90, 30));
 
-        jLabel15.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel15.setText("REPORTS");
-        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel15MouseClicked(evt);
-            }
-        });
-        mbg.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 90, 30));
-
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel5.setText("PROFILE");
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -218,7 +198,7 @@ public class accountmanager extends javax.swing.JFrame {
                 jLabel5MouseClicked(evt);
             }
         });
-        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 70, 30));
+        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 70, 30));
 
         jLabel13.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel13.setText("LOGS");
@@ -227,7 +207,7 @@ public class accountmanager extends javax.swing.JFrame {
                 jLabel13MouseClicked(evt);
             }
         });
-        mbg.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 50, 30));
+        mbg.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 50, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -282,7 +262,7 @@ public class accountmanager extends javax.swing.JFrame {
         
         // ✅ Add logging here
 session sess = session.getInstance();
-DBLogger.log(sess.getUsername(), "Activated user with ID: " + id);
+DBLogger.log(sess.getUsername(), "Activated user with ID: " + id, Integer.parseInt(sess.getU_id()));
 displayData();
 
     }//GEN-LAST:event_activateActionPerformed
@@ -316,7 +296,7 @@ displayData();
             con.deleteData(query);
  // ✅ Log the deletion
     session sess = session.getInstance();
-    DBLogger.log(sess.getUsername(), "Deleted user with ID: " + id);
+    DBLogger.log(sess.getUsername(), "Deleted user with ID: " + id, Integer.parseInt(sess.getU_id()));
             // Refresh table
             displayData();
 
@@ -346,14 +326,10 @@ displayData();
         eda.setVisible(true);
     }//GEN-LAST:event_editActionPerformed
 
-    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        adminreservation reservation = new adminreservation();  // Create a new instance of reservation panel
-        reservation.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel11MouseClicked
-
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
-
+        adminDB admindb = new adminDB();
+        admindb.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jLabel10MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
@@ -362,12 +338,6 @@ displayData();
         man.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
-
-    private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
-        adminreport arp = new adminreport();
-        arp.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel15MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         account acc = new account();
@@ -424,9 +394,7 @@ displayData();
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;

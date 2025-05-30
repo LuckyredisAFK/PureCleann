@@ -32,10 +32,20 @@ public class adminlogs extends javax.swing.JFrame {
     DefaultTableModel model = (DefaultTableModel) overview.getModel();
     model.setRowCount(0); // clear old data
 
+    // Assume this is the u_id of the logged-in user
+    int loggedInUserId = getLoggedInUserId(); // This method should return the u_id of the logged-in user
+
     try {
         Connection conn = connectDB.getConnection(); // Get connection from your class
-        String sql = "SELECT log_id, user_name, action, log_time FROM tbl_logs ORDER BY log_time DESC";
+
+        // Modify the SQL to join tbl_logs with tbl_user to fetch u_id
+        String sql = "SELECT log_id, user_name, action, log_time FROM tbl_logs " +
+                     "JOIN tbl_user ON tbl_logs.u_id = tbl_user.u_id " +
+                     "WHERE tbl_logs.u_id = ? ORDER BY log_time DESC";
+                     
         PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, loggedInUserId); // Set the logged-in user ID
+
         ResultSet rs = stmt.executeQuery();
 
         while (rs.next()) {
@@ -53,6 +63,11 @@ public class adminlogs extends javax.swing.JFrame {
     } catch (SQLException e) {
         e.printStackTrace();
     }
+    }
+    
+    private int getLoggedInUserId() {
+    // For example, the logged-in user ID might be stored in a variable or session
+    return 101; // Replace with actual logic to get the logged-in user’s u_id
 }
 
 
@@ -72,12 +87,11 @@ public class adminlogs extends javax.swing.JFrame {
         overview = new javax.swing.JTable();
         refresh = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -128,15 +142,6 @@ public class adminlogs extends javax.swing.JFrame {
         jLabel4.setText("PureClean");
         mbg.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 90, -1));
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel5.setText("PROFILE");
-        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel5MouseClicked(evt);
-            }
-        });
-        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 70, 30));
-
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/backlogin1.png"))); // NOI18N
         jLabel8.setText("Logout");
         jLabel8.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -151,15 +156,6 @@ public class adminlogs extends javax.swing.JFrame {
         });
         mbg.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, -1, -1));
 
-        jLabel9.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel9.setText("ACCOUNT");
-        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel9MouseClicked(evt);
-            }
-        });
-        mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 90, 30));
-
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel10.setText("DASHBOARD");
         jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -167,25 +163,34 @@ public class adminlogs extends javax.swing.JFrame {
                 jLabel10MouseClicked(evt);
             }
         });
-        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 110, 30));
+        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 110, 30));
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel6.setText("LOGS");
-        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel9.setText("ACCOUNT");
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel6MouseClicked(evt);
+                jLabel9MouseClicked(evt);
             }
         });
-        mbg.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 50, 30));
+        mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 90, 30));
 
-        jLabel11.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel11.setText("RESERVATION");
-        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel5.setText("PROFILE");
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel11MouseClicked(evt);
+                jLabel5MouseClicked(evt);
             }
         });
-        mbg.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 120, 30));
+        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 70, 30));
+
+        jLabel13.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel13.setText("LOGS");
+        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
+        mbg.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 50, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -216,13 +221,6 @@ public class adminlogs extends javax.swing.JFrame {
         loadLogs();
     }//GEN-LAST:event_refreshActionPerformed
 
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        account acc = new account();
-
-        acc.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel5MouseClicked
-
     private void jLabel8FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jLabel8FocusLost
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel8FocusLost
@@ -234,6 +232,12 @@ public class adminlogs extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
 
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+        adminDB admindb = new adminDB();
+        admindb.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel10MouseClicked
+
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         accountmanager man = new accountmanager();
 
@@ -241,20 +245,19 @@ public class adminlogs extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
-    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
-        adminDB db = new adminDB();
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        account acc = new account();
 
-        db.setVisible(true);
+        acc.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jLabel10MouseClicked
+    }//GEN-LAST:event_jLabel5MouseClicked
 
-    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        
-    }//GEN-LAST:event_jLabel6MouseClicked
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+        adminlogs log = new adminlogs();
 
-    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel11MouseClicked
+        log.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel13MouseClicked
 
     /**
      * @param args the command line arguments
@@ -293,10 +296,9 @@ public class adminlogs extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

@@ -252,95 +252,91 @@ public class reservation extends javax.swing.JFrame {
     }//GEN-LAST:event_SignupFocusLost
 
     private void SignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupActionPerformed
-         
-
-
 // Validate customer name, location, contact number, and service
-    String customerName = customername.getText();
-    String locationText = location.getText();
-    String contactNumber = contactnumber.getText();
-    String serviceType = (String) role.getSelectedItem();
-    double cost = selectedCost;
-    String serviceStartDate = date.getText();  // Get the start date from the text field
-    String status = "Pending";  // Default status
+String customerName = customername.getText();
+String locationText = location.getText();
+String contactNumber = contactnumber.getText();
+String packageType = (String) role.getSelectedItem();  // Changed to r_package
+double cost = selectedCost;
+String serviceStartDate = date.getText();  // Get the start date from the text field
+String status = "Pending";  // Default status
 
-    // Check for any missing required fields
-    if (customerName.isEmpty() || locationText.isEmpty() || contactNumber.isEmpty() || serviceType.equals("(Choose Service type)") || serviceStartDate.isEmpty()) {
-        // Show a message or highlight the fields that are missing
-        if (customerName.isEmpty()) {
-            customerrequired.setText("Customer Name is required");
-        }
-        if (locationText.isEmpty()) {
-            locationrequired.setText("Location is required");
-        }
-        if (contactNumber.isEmpty()) {
-            cnumberequired.setText("Contact number is required");
-        }
-        if (serviceType.equals("(Choose Service type)")) {
-            servicerequired.setText("Service type is required");
-        }
-        if (serviceStartDate.isEmpty()) {
-            datestartrequired.setText("Start date and time is required");
-        }
+// Check for any missing required fields
+if (customerName.isEmpty() || locationText.isEmpty() || contactNumber.isEmpty() || packageType.equals("(Choose Service type)") || serviceStartDate.isEmpty()) {
+    // Show a message or highlight the fields that are missing
+    if (customerName.isEmpty()) {
+        customerrequired.setText("Customer Name is required");
+    }
+    if (locationText.isEmpty()) {
+        locationrequired.setText("Location is required");
+    }
+    if (contactNumber.isEmpty()) {
+        cnumberequired.setText("Contact number is required");
+    }
+    if (packageType.equals("(Choose Service type)")) {
+        servicerequired.setText("Service type is required");
+    }
+    if (serviceStartDate.isEmpty()) {
+        datestartrequired.setText("Start date and time is required");
+    }
+} else {
+    // Validate the date format
+    if (!serviceStartDate.matches("\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2} [APap][Mm]")) {
+        datestartrequired.setText("Invalid date/time format. Use dd/MM/yyyy hh:mm AM/PM");
+        datestartrequired.setForeground(Color.RED);
     } else {
-        // Validate the date format
-        if (!serviceStartDate.matches("\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2} [APap][Mm]")) {
-            datestartrequired.setText("Invalid date/time format. Use dd/MM/yyyy hh:mm AM/PM");
-            datestartrequired.setForeground(Color.RED);
-        } else {
-            // Insert reservation into the database if everything is valid
-            try {
-                // Establish database connection
-                connectDB db = new connectDB();
-                Connection conn = db.getConnection();
+        // Insert reservation into the database if everything is valid
+        try {
+            // Establish database connection
+            connectDB db = new connectDB();
+            Connection conn = db.getConnection();
 
-                // SQL query to insert reservation details into tbl_reservation
-                String query = "INSERT INTO tbl_reservation (r_customername, r_type, r_creationdate, r_servicestartdate, r_status, r_cost, r_cnumber, r_location) "
-                             + "VALUES (?, ?, NOW(), ?, ?, ?, ?, ?)";
+            // SQL query to insert reservation details into tbl_reservation (r_package instead of r_type)
+            String query = "INSERT INTO tbl_reservation (r_customername, r_package, r_creationdate, r_servicestartdate, r_status, r_cost, r_cnumber, r_location) "
+                         + "VALUES (?, ?, NOW(), ?, ?, ?, ?, ?)";
 
-                // Create prepared statement with RETURN_GENERATED_KEYS option
-                PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-                stmt.setString(1, customerName);
-                stmt.setString(2, serviceType);
-                stmt.setString(3, serviceStartDate);  // Set the actual service start date
-                stmt.setString(4, status);           // Default "Pending"
-                stmt.setDouble(5, cost);             // Set cost based on service selected
-                stmt.setString(6, contactNumber);    // Contact number
-                stmt.setString(7, locationText);     // Location
+            // Create prepared statement with RETURN_GENERATED_KEYS option
+            PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, customerName);
+            stmt.setString(2, packageType);  // Changed to r_package
+            stmt.setString(3, serviceStartDate);  // Set the actual service start date
+            stmt.setString(4, status);           // Default "Pending"
+            stmt.setDouble(5, cost);             // Set cost based on service selected
+            stmt.setString(6, contactNumber);    // Contact number
+            stmt.setString(7, locationText);     // Location
 
-                // Execute the insert and retrieve generated keys
-                int result = stmt.executeUpdate();
-                if (result > 0) {
-                    // Get generated reservation ID
-                    java.sql.ResultSet rs = stmt.getGeneratedKeys();
-                    if (rs.next()) {
-                        int reservationId = rs.getInt(1);  // Reservation ID
-                        System.out.println("Reservation created successfully! ID: " + reservationId);
-                        
-                        // Optionally, you can assign an employee to the reservation here (future logic)
-                        // Example: assignEmployee(reservationId, employeeId);  // future logic
-                    }
-
-                    // Optionally, clear the fields after submission
-                    customername.setText("");
-                    location.setText("");
-                    contactnumber.setText("");
-                    role.setSelectedIndex(0);  // Reset service type
-                    date.setText("");  // Reset the date field
+            // Execute the insert and retrieve generated keys
+            int result = stmt.executeUpdate();
+            if (result > 0) {
+                // Get generated reservation ID
+                java.sql.ResultSet rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    int reservationId = rs.getInt(1);  // Reservation ID
+                    System.out.println("Reservation created successfully! ID: " + reservationId);
+                    
+                    // Optionally, you can assign an employee to the reservation here (future logic)
+                    // Example: assignEmployee(reservationId, employeeId);  // future logic
                 }
-                
-                 // After successful submission, navigate back to the reservation panel
-            this.dispose();  // Close the current window
-            adminreservation reservation = new adminreservation();  // Create a new instance of reservation panel
-            reservation.setVisible(true);  // Show the reservation panel
-            } catch (Exception e) {
-                e.printStackTrace();
-                // Handle database exceptions
-                System.out.println("Error inserting reservation: " + e.getMessage());
+
+                // Optionally, clear the fields after submission
+                customername.setText("");
+                location.setText("");
+                contactnumber.setText("");
+                role.setSelectedIndex(0);  // Reset service type
+                date.setText("");  // Reset the date field
             }
+            
+             // After successful submission, navigate back to the reservation panel
+        this.dispose();  // Close the current window
+        adminreservation reservation = new adminreservation();  // Create a new instance of reservation panel
+        reservation.setVisible(true);  // Show the reservation panel
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle database exceptions
+            System.out.println("Error inserting reservation: " + e.getMessage());
         }
     }
-
+}
 
     }//GEN-LAST:event_SignupActionPerformed
 
@@ -478,6 +474,7 @@ datestartrequired.repaint();
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(reservation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

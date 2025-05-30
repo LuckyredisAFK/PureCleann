@@ -7,6 +7,7 @@ package panel;
 
 import admin.*;
 import config.session;
+import crud.addsecurityquestion;
 import crud.changepassword;
 import crud.editaccount;
 import java.awt.Image;
@@ -18,7 +19,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import panel.login;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;    
+import java.nio.file.StandardCopyOption;
+
 
 /**
  *
@@ -83,11 +85,12 @@ public class account extends javax.swing.JFrame {
         name = new javax.swing.JLabel();
         changepassword = new javax.swing.JButton();
         changeProfileButton = new javax.swing.JButton();
+        security = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -131,6 +134,14 @@ public class account extends javax.swing.JFrame {
         });
         jPanel5.add(changeProfileButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, -1, 20));
 
+        security.setText("Edit Security Question");
+        security.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                securityActionPerformed(evt);
+            }
+        });
+        jPanel5.add(security, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, -1, 20));
+
         jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 830, 490));
 
         mbg.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 850, 510));
@@ -153,32 +164,32 @@ public class account extends javax.swing.JFrame {
         });
         mbg.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, -1, -1));
 
-        jLabel11.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel11.setText("RESERVATION");
-        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel9.setText("RESERVATION");
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel11MouseClicked(evt);
+                jLabel9MouseClicked(evt);
             }
         });
-        mbg.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 120, 30));
+        mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 120, 30));
 
-        jLabel10.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel10.setText("DASHBOARD");
-        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel15.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel15.setText("REPORTS");
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel10MouseClicked(evt);
+                jLabel15MouseClicked(evt);
             }
         });
-        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 110, 30));
+        mbg.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 90, 30));
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel5.setText("PROFILE");
-        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel7.setText("PROFILE");
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel5MouseClicked(evt);
+                jLabel7MouseClicked(evt);
             }
         });
-        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 70, 30));
+        mbg.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 70, 30));
 
         getContentPane().add(mbg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 510));
 
@@ -241,22 +252,29 @@ public class account extends javax.swing.JFrame {
 
     }//GEN-LAST:event_changeProfileButtonActionPerformed
 
-    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        adminreservation reservation = new adminreservation();  // Create a new instance of reservation panel
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        ereservation reservation = new ereservation();  // Create a new instance of reservation panel
         reservation.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jLabel11MouseClicked
+    }//GEN-LAST:event_jLabel9MouseClicked
 
-    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+    private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
+        Employeereport arp = new Employeereport();
+        arp.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel15MouseClicked
 
-    }//GEN-LAST:event_jLabel10MouseClicked
-
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         account acc = new account();
-
         acc.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jLabel5MouseClicked
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void securityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_securityActionPerformed
+        addsecurityquestion sec = new addsecurityquestion();
+        sec.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_securityActionPerformed
 
     /**
      * @param args the command line arguments
@@ -299,16 +317,17 @@ public class account extends javax.swing.JFrame {
     private javax.swing.JButton changepassword;
     private javax.swing.JLabel cnum;
     private javax.swing.JLabel email;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel mbg;
     private javax.swing.JLabel name;
     private javax.swing.JLabel profilepic;
     private javax.swing.JLabel role;
+    private javax.swing.JButton security;
     // End of variables declaration//GEN-END:variables
 }

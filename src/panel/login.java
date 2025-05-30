@@ -290,84 +290,82 @@ password.repaint();
 
     private void loginbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbuttonActionPerformed
         String user = username.getText().trim();
-    String pass = password.getText().trim();
+String pass = password.getText().trim();
 
-    if (user.isEmpty() || pass.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Username and/or password cannot be empty.", "Login Error", JOptionPane.ERROR_MESSAGE);
-        username.requestFocus();
+if (user.isEmpty() || pass.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Username and/or password cannot be empty.", "Login Error", JOptionPane.ERROR_MESSAGE);
+    username.requestFocus();
+    return;
+}
+
+try {
+    // Directly use the entered username and password without hashing
+    String[] loginData = loginAcc(user, pass);
+
+    if (loginData == null) {
+        // Failed login attempt
+        DBLogger.log(user, "Failed login attempt", loggedInUserId);
+        JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+        password.requestFocus();
         return;
     }
 
-    try {
-        // Directly use the entered username and password without hashing
-        String[] loginData = loginAcc(user, pass);
+    String[] userDetails = getUserDetails(user);
 
-        if (loginData == null) {
-            // Failed login attempt
-            DBLogger.log(user, "Failed login attempt");  // Log failed attempt
-            JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
-            password.requestFocus();
-            return;
-        }
+    String userID = userDetails[0]; // This is the user ID
+    String firstName = userDetails[1];
+    String lastName = userDetails[2];
+    String email = userDetails[3];
+    String contactNumber = userDetails[4];
+    String accType = loginData[0];
+    String accStatus = loginData[1];
 
-        String[] userDetails = getUserDetails(user);
-
-        String userID = userDetails[0];
-        String firstName = userDetails[1];
-        String lastName = userDetails[2];
-        String email = userDetails[3];
-        String contactNumber = userDetails[4];
-        String accType = loginData[0];
-        String accStatus = loginData[1];
-
-        if (!"active".equalsIgnoreCase(accStatus)) {
-            // Account is not active
-            DBLogger.log(user, "Inactive account login attempt");  // Log attempt with inactive account
-            JOptionPane.showMessageDialog(this, "Your account is still pending. Please contact the administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        session sess = session.getInstance();
-        sess.setU_id(userID);
-        sess.setUsername(user);
-        sess.setFirstName(firstName);
-        sess.setLastName(lastName);
-        sess.setEmail(email);
-        sess.setContact(contactNumber);
-        sess.setAcc_type(accType);
-        sess.setAcc_status(accStatus);
-
-        if (accType != null) {
-            if ("Admin".equalsIgnoreCase(accType)) {
-                DBLogger.log(user, "Admin logged in");  // Log successful login for Admin
-                new adminDB().setVisible(true);
-            } else if ("Employee".equalsIgnoreCase(accType)) {
-                DBLogger.log(user, "Employee logged in");  // Log successful login for Employee
-                new UserDB().setVisible(true);
-            } else {
-                // Invalid user type
-                DBLogger.log(user, "Unknown user type login attempt");  // Log unknown user type attempt
-                JOptionPane.showMessageDialog(this, "Unknown user type!", "Login Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            this.dispose(); // Close login window
-        } else {
-            // Invalid login credentials
-            DBLogger.log(user, "Incorrect login credentials");  // Log incorrect credentials attempt
-            JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
-            password.requestFocus();
-        }
-
-    } catch (Exception e) {
-        // Log error during login
-        DBLogger.log(user, "Error during login: " + e.getMessage());  // Log error
-        JOptionPane.showMessageDialog(this, "Error during login: " + e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
+    if (!"active".equalsIgnoreCase(accStatus)) {
+        // Account is not active
+        DBLogger.log(user, "Inactive account login attempt", loggedInUserId);
+        JOptionPane.showMessageDialog(this, "Your account is still pending. Please contact the administrator.", "Login Error", JOptionPane.ERROR_MESSAGE);
+        return;
     }
 
+    session sess = session.getInstance();
+    sess.setU_id(userID);
+    sess.setUsername(user);
+    sess.setFirstName(firstName);
+    sess.setLastName(lastName);
+    sess.setEmail(email);
+    sess.setContact(contactNumber);
+    sess.setAcc_type(accType);
+    sess.setAcc_status(accStatus);
 
+    // Now use userID as the logged-in user ID when logging the login action
+    if (accType != null) {
+        if ("Admin".equalsIgnoreCase(accType)) {
+            DBLogger.log(user, "Admin logged in", Integer.parseInt(userID));   // Log successful login for Admin
+            new adminDB().setVisible(true);
+        } else if ("Employee".equalsIgnoreCase(accType)) {
+            DBLogger.log(user, "Employee logged in", Integer.parseInt(userID));   // Log successful login for Employee
+            new ereservation().setVisible(true);
+        } else {
+            // Invalid user type
+            DBLogger.log(user, "Unknown user type login attempt", Integer.parseInt(userID)); 
+            JOptionPane.showMessageDialog(this, "Unknown user type!", "Login Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
+        this.dispose(); // Close login window
+    } else {
+        // Invalid login credentials
+        DBLogger.log(user, "Incorrect login credentials", Integer.parseInt(userID));  // Log incorrect credentials attempt
+        JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+        password.requestFocus();
+    }
+
+} catch (Exception e) {
+    // Log error during login
+    DBLogger.log(user, "Error during login: " + e.getMessage(), 0);  // Log error (0 for unknown user ID)
+    JOptionPane.showMessageDialog(this, "Error during login: " + e.getMessage(), "Login Error", JOptionPane.ERROR_MESSAGE);
+    e.printStackTrace();
+}
     }//GEN-LAST:event_loginbuttonActionPerformed
 
     private void forgotpassword1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forgotpassword1MouseClicked

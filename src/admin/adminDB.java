@@ -6,9 +6,11 @@
 package admin;
 
 import config.connectDB;
+import crud.addpackage;
 import crud.reservation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 import panel.login;
 import panel.register;
@@ -28,32 +30,19 @@ public class adminDB extends javax.swing.JFrame {
         displayData();
     }
     
-    public void displayData() {
-    try {
-        connectDB dbc = new connectDB();
+    public void displayData(){
         
-        // Select only the specific columns from tbl_user
-        String query = "SELECT u_id, u_firstname, u_lastname, u_contactnumber, u_type, u_status FROM tbl_user";
-        ResultSet rs = dbc.getData(query);
+        try{
+            connectDB dbc = new connectDB();
+            ResultSet rs = dbc.getData("SELECT * FROM tbl_reservation");           
+            overview.setModel(DbUtils.resultSetToTableModel(rs));
+            
+            
+        }catch(SQLException ex){
+            System.out.println("Errors"+ex.getMessage());
+        }
         
-        // Use DbUtils to set the result set to the table
-        overview.setModel(DbUtils.resultSetToTableModel(rs));
-
-        // Change column titles
-        overview.getColumnModel().getColumn(0).setHeaderValue("ID");
-        overview.getColumnModel().getColumn(1).setHeaderValue("First Name");
-        overview.getColumnModel().getColumn(2).setHeaderValue("Last Name");
-        overview.getColumnModel().getColumn(3).setHeaderValue("Contact Number");
-        overview.getColumnModel().getColumn(4).setHeaderValue("Role");
-        overview.getColumnModel().getColumn(5).setHeaderValue("Status");
-        
-        // Refresh the table to apply the new headers
-        overview.getTableHeader().repaint();
-        
-    } catch (SQLException ex) {
-        System.out.println("Errors: " + ex.getMessage());
     }
-}
 
 
 
@@ -71,25 +60,24 @@ public class adminDB extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         overview = new javax.swing.JTable();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        Preservation = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        Treservation = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         Aemployees = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        Treservation = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         Creservation = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        Preservation = new javax.swing.JLabel();
+        reject = new javax.swing.JButton();
+        approve = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
 
@@ -98,7 +86,7 @@ public class adminDB extends javax.swing.JFrame {
         mbg.setBackground(new java.awt.Color(255, 204, 204));
         mbg.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(255, 204, 204));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel5.setBackground(new java.awt.Color(255, 204, 204));
@@ -117,24 +105,19 @@ public class adminDB extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(overview);
 
-        jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 730, 220));
+        jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 730, 220));
 
-        jLabel7.setText("Overview");
-        jPanel5.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, 20));
+        jPanel3.setBackground(new java.awt.Color(242, 242, 242));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 810, 290));
+        jLabel2.setText("Active Employees");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
 
-        jPanel6.setBackground(new java.awt.Color(242, 242, 242));
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        Aemployees.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        Aemployees.setText("0");
+        jPanel3.add(Aemployees, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
 
-        jLabel12.setText("Pending Reservations");
-        jPanel6.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, -1, -1));
-
-        Preservation.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        Preservation.setText("0");
-        jPanel6.add(Preservation, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
-
-        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, 210, 80));
+        jPanel5.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 210, 80));
 
         jPanel2.setBackground(new java.awt.Color(242, 242, 242));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -146,19 +129,7 @@ public class adminDB extends javax.swing.JFrame {
         Treservation.setText("0");
         jPanel2.add(Treservation, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 210, 80));
-
-        jPanel3.setBackground(new java.awt.Color(242, 242, 242));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel2.setText("Active Employees");
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, -1, -1));
-
-        Aemployees.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        Aemployees.setText("0");
-        jPanel3.add(Aemployees, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
-
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 120, 210, 80));
+        jPanel5.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 120, 210, 80));
 
         jPanel7.setBackground(new java.awt.Color(242, 242, 242));
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -170,9 +141,39 @@ public class adminDB extends javax.swing.JFrame {
         Creservation.setText("0");
         jPanel7.add(Creservation, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
 
-        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 120, 210, 80));
+        jPanel5.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, 210, 80));
 
-        mbg.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 850, 510));
+        jPanel6.setBackground(new java.awt.Color(242, 242, 242));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel12.setText("Pending Reservations");
+        jPanel6.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, -1, -1));
+
+        Preservation.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        Preservation.setText("0");
+        jPanel6.add(Preservation, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
+
+        jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 20, 210, 80));
+
+        reject.setText("Reject");
+        reject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rejectActionPerformed(evt);
+            }
+        });
+        jPanel5.add(reject, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 220, -1, -1));
+
+        approve.setText("Approve");
+        approve.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                approveActionPerformed(evt);
+            }
+        });
+        jPanel5.add(approve, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 220, -1, -1));
+
+        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 840, 490));
+
+        mbg.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 0, 860, 510));
 
         jLabel4.setFont(new java.awt.Font("Microsoft JhengHei", 1, 18)); // NOI18N
         jLabel4.setText("PureClean");
@@ -192,15 +193,6 @@ public class adminDB extends javax.swing.JFrame {
         });
         mbg.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, -1, -1));
 
-        jLabel11.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel11.setText("RESERVATION");
-        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel11MouseClicked(evt);
-            }
-        });
-        mbg.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 120, 30));
-
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel10.setText("DASHBOARD");
         jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -208,7 +200,7 @@ public class adminDB extends javax.swing.JFrame {
                 jLabel10MouseClicked(evt);
             }
         });
-        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 110, 30));
+        mbg.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 110, 30));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel9.setText("ACCOUNT");
@@ -219,15 +211,6 @@ public class adminDB extends javax.swing.JFrame {
         });
         mbg.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 90, 30));
 
-        jLabel15.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        jLabel15.setText("REPORTS");
-        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel15MouseClicked(evt);
-            }
-        });
-        mbg.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 90, 30));
-
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel5.setText("PROFILE");
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -235,7 +218,7 @@ public class adminDB extends javax.swing.JFrame {
                 jLabel5MouseClicked(evt);
             }
         });
-        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 70, 30));
+        mbg.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 70, 30));
 
         jLabel13.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel13.setText("LOGS");
@@ -244,7 +227,7 @@ public class adminDB extends javax.swing.JFrame {
                 jLabel13MouseClicked(evt);
             }
         });
-        mbg.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 50, 30));
+        mbg.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 50, 30));
 
         getContentPane().add(mbg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 510));
 
@@ -263,14 +246,10 @@ public class adminDB extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
 
-    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        adminreservation reservation = new adminreservation();  // Create a new instance of reservation panel
-        reservation.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel11MouseClicked
-
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
-
+        adminDB admindb = new adminDB();
+        admindb.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jLabel10MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
@@ -279,12 +258,6 @@ public class adminDB extends javax.swing.JFrame {
         man.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
-
-    private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
-        adminreport arp = new adminreport();
-        arp.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel15MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         account acc = new account();
@@ -299,6 +272,36 @@ public class adminDB extends javax.swing.JFrame {
         log.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel13MouseClicked
+
+    private void rejectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rejectActionPerformed
+        int selectedRow = overview.getSelectedRow();
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a row to edit.");
+            return;
+        }
+
+        String id = overview.getValueAt(selectedRow, 0).toString();
+
+        connectDB con = new connectDB();
+
+        con.updateData("UPDATE tbl_reservation SET r_status = 'Reject' WHERE r_id = '"+id+"'");
+    }//GEN-LAST:event_rejectActionPerformed
+
+    private void approveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approveActionPerformed
+        int selectedRow = overview.getSelectedRow();
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a row to edit.");
+            return;
+        }
+
+        String id = overview.getValueAt(selectedRow, 0).toString();
+
+        connectDB con = new connectDB();
+
+        con.updateData("UPDATE tbl_reservation SET r_status = 'Approve' WHERE r_id = '"+id+"'");
+    }//GEN-LAST:event_approveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -340,17 +343,15 @@ public class adminDB extends javax.swing.JFrame {
     private javax.swing.JLabel Creservation;
     private javax.swing.JLabel Preservation;
     private javax.swing.JLabel Treservation;
+    private javax.swing.JButton approve;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -362,5 +363,6 @@ public class adminDB extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mbg;
     private javax.swing.JTable overview;
+    private javax.swing.JButton reject;
     // End of variables declaration//GEN-END:variables
 }
